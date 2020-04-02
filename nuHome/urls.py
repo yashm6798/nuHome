@@ -15,7 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from nuHome_app import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('user-login/', views.user_login, 'user-login'),
+    path('ngo-login/', views.ngo_login, 'ngo-login'),
+    path('registration/', views.registration, 'registration')
+    path('logout', views.logout, 'logout')
 ]

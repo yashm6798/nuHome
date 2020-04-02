@@ -2,19 +2,22 @@ from django.db import models
 from django.contrib.auth.models import User
 
 # Create your models here.
-REGION_CHOICES=()
 class Refugee_Profile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	avatar = models.FileField(blank=True)
 	bio = models.TextField(blank=True)
-	region = models.CharField(max_length=2, choices=REGION_CHOICES)
+	region = models.CharField(max_length=20)
 	verification_status = models.BooleanField(default=False)
 
 class NGO_Profile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	avatar = models.FileField(blank=True)
 	bio = models.TextField(blank=True)
-	region = models.CharField(max_length=2, choices=REGION_CHOICES)
+	region = models.CharField(max_length=20)
+
+class NGO_Admin_Profile(models.Model):
+	user = models.OneToOneField(User, on_delete=models.CASCADE)
+	region = models.CharField(max_length=20)
 
 class Post(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
