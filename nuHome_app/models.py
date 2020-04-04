@@ -23,10 +23,8 @@ class Post(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	title = models.TextField(blank=False)
 	content = models.TextField(blank=False)
-	STATUS_CHOICES = [('V', 'Verified'), ('U', 'Unverified'), ('F', 'False')]
-	status = models.CharField(max_length=2, choices=STATUS_CHOICES)
-	CATEGORY_CHOICES = [('I', 'Important'), ('S', 'Social'), ('J', 'Jobs'), ('A', 'Accommodation'), ('R', 'Resources'), ('O', 'Other')]
-	category = models.CharField(max_length=2, choices=CATEGORY_CHOICES)
+	status = models.CharField(max_length=10)
+	category = models.CharField(max_length=13)
 	date_time = models.DateTimeField(auto_now_add=True)
 
 class Comment(models.Model):
@@ -36,7 +34,7 @@ class Comment(models.Model):
 	content = models.TextField(blank=False)
 
 class Message(models.Model):
-	from_user = models.ForeignKey(User, on_delete=models.CASCADE)
-	to_user = models.ForeignKey(User, on_delete=models.CASCADE)
+	from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='message_from')
+	to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='message_to')
 	date_time = models.DateTimeField(auto_now_add=True)
 	content = models.TextField(blank=False)
