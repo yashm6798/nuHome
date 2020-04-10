@@ -12,7 +12,6 @@ from django.contrib.auth.decorators import login_required
 # STATUS CODE 400 = ERROR
 # STATUS CODE 401 = INCORRECT CREDENTIALS
 
-
 def registration(request):
 	# GET request is only used to return a cookie with csrf token which needs to be returned for POST requests
 
@@ -52,7 +51,6 @@ def registration(request):
 		# Return an http response back to the frontend
 		return HttpResponse(response, content_type='application/json', status=status)
 
-
 def ngo_registration(request):
 
 	# This methods does not require a get request to return a cookie since only a logged in ngo_admin will invoke this function
@@ -79,16 +77,15 @@ def ngo_registration(request):
 			# Save the ngo user profile
 			new_ngo_user.save()
 			# Authenticate the username and password (Not required since data is just stored and is correct)
-			new_user = authenticate(username=params['username'], password=params['password'])
+			# new_user = authenticate(username=params['username'], password=params['password'])
 			# Login the user and generate session
-			login(request, new_user)
+			# login(request, new_user)
 			# Create json response to return to frontend
 			response = json.dumps({'res': {'username': new_user.username, 'region': new_ngo_user.region, 'bio': new_ngo_user.bio, 'avatar': new_ngo_user.avatar, 'user_type': 'ngo_worker'}})
 			status=200
 		
 		# Return http response
 		return HttpResponse(response, content_type='application/json', status=status)
-
 
 def ngo_admin_registration(request):
 	# Return cookie to be used for POST requests
@@ -116,16 +113,15 @@ def ngo_admin_registration(request):
 			# Save the ngo admin profile
 			new_ngo_admin.save()
 			# Authenticate the username and password (Not required since data is just stored and is correct)
-			new_user = authenticate(username=params['username'], password=params['password'])
+			# new_user = authenticate(username=params['username'], password=params['password'])
 			# Login the user and generate session
-			login(request, new_user)
+			# login(request, new_user)
 			# Create json response to return to frontend
 			response = json.dumps({'res': {'username': new_user.username, 'region': new_ngo_admin.region, 'user_type': 'ngo_admin'}})
 			status=200
 		
 		# Return http response
 		return HttpResponse(response, content_type='application/json', status=status)
-
 
 def login_action(request):
 	# Return cookie to be used for POST requests
@@ -174,11 +170,10 @@ def login_action(request):
 
 			# The only remaining option is of ngo admin. Retrieve admin profile and create json response
 			else:
-				ngo_admin = NGO_Admin.objects.get(user=user)
+				ngo_admin = NGO_Admin_Profile.objects.get(user=user)
 				response = json.dumps({'res': {'username': user.username, 'region': ngo_admin.region, 'user_type': 'ngo_admin'}})
 
 		return HttpResponse(response, content_type='application/json', status=status)
-
 
 def logout_action(request):
 
