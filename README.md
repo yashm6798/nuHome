@@ -1,6 +1,8 @@
 # nuHome
 EPS project
 
+API doc accessible in nuHome/apidoc/doc/index.html
+
 Install django ( pip install django )
 Install json library ( pip install json )
 Go to directory

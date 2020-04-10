@@ -1,0 +1,11 @@
+{
+  "name": "NuHome Api documentation",
+  "version": "0.3.0",
+  "description": "Documentation for the REST api access provided at NuHome",
+  "title": "NuHome Api doc",
+  "template": {
+    "withCompare": true,
+    "withGenerator": true,
+    "aloneDisplay": false
+  }
+}
