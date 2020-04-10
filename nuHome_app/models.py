@@ -4,14 +4,14 @@ from django.contrib.auth.models import User
 # Create your models here.
 class Refugee_Profile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
-	avatar = models.FileField(blank=True)
+	avatar = models.CharField(blank=True, max_length=2)
 	bio = models.TextField(blank=True)
 	region = models.CharField(max_length=20)
 	verification_status = models.BooleanField(default=False)
 
 class NGO_Profile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
-	avatar = models.FileField(blank=True)
+	avatar = models.CharField(blank=True, max_length=2)
 	bio = models.TextField(blank=True)
 	region = models.CharField(max_length=20)
 

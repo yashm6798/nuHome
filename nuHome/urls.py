@@ -19,8 +19,8 @@ from nuHome_app import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('user-login/', views.user_login, name='user-login'),
-    path('ngo-login/', views.ngo_login, name='ngo-login'),
-    path('registration/', views.registration, name='registration'),
+    path('login/', views.login_action, name='login'),
+    path('registration/', views.registration, name='refugee_registration'),
+    path('ngo_registration/', views.ngo_registration, name='ngo_registration'),
     path('logout/', views.logout, name='logout'),
 ]
