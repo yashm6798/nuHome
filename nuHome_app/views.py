@@ -11,7 +11,8 @@ from django.contrib.auth.decorators import login_required
 # STATUS CODE 200 = OKAY
 # STATUS CODE 400 = ERROR
 # STATUS CODE 401 = INCORRECT CREDENTIALS
-@csrf_exempt
+
+
 def registration(request):
 	# GET request is only used to return a cookie with csrf token which needs to be returned for POST requests
 
@@ -45,7 +46,7 @@ def registration(request):
 			# Login function generates a session for the user and logs the user in
 			login(request, new_user)
 			# Create a json response to return to the frontend with the required parameters
-			response = json.dumps({'res': {'username': new_user.username, 'region': new_refugee.region, 'bio': new_refugee.bio, 'avatar': new_refugee.avatar, 'user_type': 'Refugee', 'isVerified': False}})
+			response = json.dumps({'res': {'username': new_user.username, 'region': new_refugee.region, 'bio': new_refugee.bio, 'avatar': new_refugee.avatar, 'user_type': 'refugee', 'isVerified': False}})
 			status=200
 		
 		# Return an http response back to the frontend
@@ -73,7 +74,7 @@ def ngo_registration(request):
 			new_user = User.objects.create_user(username=params['username'], password=params['password'])
 			# Save in the db
 			new_user.save()
-			# Create a ngo user profile for the user
+			# Create an ngo user profile for the user
 			new_ngo_user = NGO_Profile(user=new_user, region=params['region'])
 			# Save the ngo user profile
 			new_ngo_user.save()
@@ -82,13 +83,50 @@ def ngo_registration(request):
 			# Login the user and generate session
 			login(request, new_user)
 			# Create json response to return to frontend
-			response = json.dumps({'res': {'username': new_user.username, 'region': new_ngo_user.region, 'bio': new_ngo_user.bio, 'avatar': new_ngo_user.avatar, 'user_type': 'NGO_User'}})
+			response = json.dumps({'res': {'username': new_user.username, 'region': new_ngo_user.region, 'bio': new_ngo_user.bio, 'avatar': new_ngo_user.avatar, 'user_type': 'ngo_worker'}})
 			status=200
 		
 		# Return http response
 		return HttpResponse(response, content_type='application/json', status=status)
 
-@csrf_exempt
+
+def ngo_admin_registration(request):
+	# Return cookie to be used for POST requests
+	if request.method == 'GET':
+		response = {}
+		return HttpResponse(response, content_type='application/json', status=200)
+
+	if request.method == 'POST':
+		params = json.loads(request.body)
+
+		# Check if a username is already taken
+		if User.objects.filter(username__exact=params['username']):
+			# If username is taken, return error message as json response
+			response = json.dumps({'res': {'message': 'Username taken'}})
+			status=400
+
+		# Otherwise, extract data from POST	request
+		else:	
+			# Create a Django user object
+			new_user = User.objects.create_user(username=params['username'], password=params['password'])
+			# Save in the db
+			new_user.save()
+			# Create an ngo admin profile for the user
+			new_ngo_admin = NGO_Admin_Profile(user=new_user, region=params['region'])
+			# Save the ngo admin profile
+			new_ngo_admin.save()
+			# Authenticate the username and password (Not required since data is just stored and is correct)
+			new_user = authenticate(username=params['username'], password=params['password'])
+			# Login the user and generate session
+			login(request, new_user)
+			# Create json response to return to frontend
+			response = json.dumps({'res': {'username': new_user.username, 'region': new_ngo_admin.region, 'user_type': 'ngo_admin'}})
+			status=200
+		
+		# Return http response
+		return HttpResponse(response, content_type='application/json', status=status)
+
+
 def login_action(request):
 	# Return cookie to be used for POST requests
 
@@ -124,20 +162,20 @@ def login_action(request):
 				# Check verification status of refugee and create json response accordingly
 
 				if(refugee.verification_status==False):
-					response = json.dumps({'res': {'username': user.username, 'region': refugee.region, 'bio': refugee.bio, 'avatar': refugee.avatar, 'user_type': 'Refugee', 'isVerified': False}})
+					response = json.dumps({'res': {'username': user.username, 'region': refugee.region, 'bio': refugee.bio, 'avatar': refugee.avatar, 'user_type': 'refugee', 'isVerified': False}})
 				else:
-					response = json.dumps({'res': {'username': user.username, 'region': refugee.region, 'bio': refugee.bio, 'avatar': refugee.avatar, 'user_type': 'Refugee', 'isVerified': True}})
+					response = json.dumps({'res': {'username': user.username, 'region': refugee.region, 'bio': refugee.bio, 'avatar': refugee.avatar, 'user_type': 'refugee', 'isVerified': True}})
 
 
 			# Check if the user is an ngo user by checking if user exists in any ngo profile entries and create json response accordingly
 			elif NGO_Profile.objects.filter(user=user).exists():
 				ngo_user = NGO_Profile.objects.get(user=user)
-				response = json.dumps({'res': {'username': user.username, 'region': ngo_user.region, 'bio': ngo_user.bio, 'avatar': ngo_user.avatar, 'user_type': 'NGO_User'}})
+				response = json.dumps({'res': {'username': user.username, 'region': ngo_user.region, 'bio': ngo_user.bio, 'avatar': ngo_user.avatar, 'user_type': 'ngo_worker'}})
 
 			# The only remaining option is of ngo admin. Retrieve admin profile and create json response
 			else:
 				ngo_admin = NGO_Admin.objects.get(user=user)
-				response = json.dumps({'res': {'username': user.username, 'region': ngo_admin.region, 'user_type': 'NGO_Admin'}})
+				response = json.dumps({'res': {'username': user.username, 'region': ngo_admin.region, 'user_type': 'ngo_admin'}})
 
 		return HttpResponse(response, content_type='application/json', status=status)
 
