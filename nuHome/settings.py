@@ -80,8 +80,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'nuhome_db',
-        'USER': 'yash',
-        'PASSWORD': '',
+        'USER': 'root',
+        'PASSWORD': 'Silence_0617',
         'HOST': 'localhost',
         'PORT': '3306',
     }

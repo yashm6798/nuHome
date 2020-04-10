@@ -11,9 +11,8 @@ from django.contrib.auth.decorators import login_required
 # STATUS CODE 200 = OKAY
 # STATUS CODE 400 = ERROR
 # STATUS CODE 401 = INCORRECT CREDENTIALS
-
+@csrf_exempt
 def registration(request):
-
 	# GET request is only used to return a cookie with csrf token which needs to be returned for POST requests
 
 	if request.method == 'GET':
@@ -23,30 +22,30 @@ def registration(request):
 	# For POST requests, need to check data and store in db if valid
 
 	if request.method == 'POST':
+		params = json.loads(request.body)
 
 		# First check if a username is already taken
-		if User.objects.filter(username__exact=request.POST['username']):
+		if User.objects.filter(username__exact=params['username']):
 			# If username is taken, return error message as json response
 			response = json.dumps({'res': {'message': 'Username taken'}})
 			status=400
 
 		# Otherwise, extract data from the body of POST request and store in the db
-		else:	
-
+		else:
 			# First create a Django user object
-			new_user = User.objects.create_user(username=request.POST['username'], password=request.POST['password'])
+			new_user = User.objects.create_user(username=params['username'], password=params['password'])
 			# Save() saves the created object in the database
 			new_user.save()
 			# Create a refugee profile for the user
-			new_refugee = Refugee_Profile(user=new_user, region=request.POST['region'])
+			new_refugee = Refugee_Profile(user=new_user, region=params['region'])
 			# Save the refugee profile
 			new_refugee.save()
 			# Authenticate function takes a username and password and authenticates using the Django User class (Not required here since data is just stored and is correct)
-			new_user = authenticate(username=request.POST['username'], password=request.POST['password'])
+			new_user = authenticate(username=params['username'], password=params['password'])
 			# Login function generates a session for the user and logs the user in
 			login(request, new_user)
 			# Create a json response to return to the frontend with the required parameters
-			response = json.dumps({'res': {'username': new_user.username, 'region': new_refugee.region, 'bio': new_refugee.bio, 'avatar': new_refugee.avatar, user_type: 'Refugee', 'isVerified': False}})
+			response = json.dumps({'res': {'username': new_user.username, 'region': new_refugee.region, 'bio': new_refugee.bio, 'avatar': new_refugee.avatar, 'user_type': 'Refugee', 'isVerified': False}})
 			status=200
 		
 		# Return an http response back to the frontend
@@ -60,9 +59,10 @@ def ngo_registration(request):
 	# Now, check and extract data from the POST request and store in db
 
 	if request.method == 'POST':
+		params = json.loads(request.body)
 
 		# Check if a username is already taken
-		if User.objects.filter(username__exact=request.POST['username']):
+		if User.objects.filter(username__exact=params['username']):
 			# If username is taken, return error message as json response
 			response = json.dumps({'res': {'message': 'Username taken'}})
 			status=400
@@ -70,15 +70,15 @@ def ngo_registration(request):
 		# Otherwise, extract data from POST	request
 		else:	
 			# Create a Django user object
-			new_user = User.objects.create_user(username=request.POST['username'], password=request.POST['password'])
+			new_user = User.objects.create_user(username=params['username'], password=params['password'])
 			# Save in the db
 			new_user.save()
 			# Create a ngo user profile for the user
-			new_ngo_user = NGO_Profile(user=new_user, region=request.POST['region'])
+			new_ngo_user = NGO_Profile(user=new_user, region=params['region'])
 			# Save the ngo user profile
 			new_ngo_user.save()
 			# Authenticate the username and password (Not required since data is just stored and is correct)
-			new_user = authenticate(username=request.POST['username'], password=request.POST['password'])
+			new_user = authenticate(username=params['username'], password=params['password'])
 			# Login the user and generate session
 			login(request, new_user)
 			# Create json response to return to frontend
@@ -88,9 +88,8 @@ def ngo_registration(request):
 		# Return http response
 		return HttpResponse(response, content_type='application/json', status=status)
 
-
+@csrf_exempt
 def login_action(request):
-
 	# Return cookie to be used for POST requests
 
 	if request.method == 'GET':
@@ -100,9 +99,10 @@ def login_action(request):
 	# Check credentials and login
 	if request.method == 'POST':
 		response={}
+		params = json.loads(request.body)
 
 		# Authenticate function returns a user object if authentication successful and a none object if authentication fails
-		user = authenticate(username=request.POST['username'], password=request.POST['password'])
+		user = authenticate(username=params['username'], password=params['password'])
 
 		# Set status to 401 if authentication fails
 		if user is None:
@@ -142,7 +142,7 @@ def login_action(request):
 		return HttpResponse(response, content_type='application/json', status=status)
 
 
-def logout(request):
+def logout_action(request):
 
 	# Logout functions expires the session of the user associated with the request
 	logout(request)

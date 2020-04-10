@@ -22,5 +22,5 @@ urlpatterns = [
     path('login/', views.login_action, name='login'),
     path('registration/', views.registration, name='refugee_registration'),
     path('ngo_registration/', views.ngo_registration, name='ngo_registration'),
-    path('logout/', views.logout, name='logout'),
+    path('logout/', views.logout_action, name='logout'),
 ]
