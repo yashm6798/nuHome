@@ -18,12 +18,21 @@
 
 @apiParam {String} username User's username.
 @apiParam {String} password User's password.
-@apiParam {UserType} type User's type.
-@apiParam {String} region User's originated region.
+@apiParam {String} type User's type.
+@apiParam {String} region User's region.
 
 @apiSuccess {String} status Successful Registration.
+@apiSuccess {JSON} res Return contents.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok"
+    "res": {
+        "username": "lion"
+    }
+}
 
-@apiError {String} UsernameAlreadyTaken The <code>id</code> of the User was taken.
+@apiError {String} UsernameAlreadyTaken The <code>username</code> was already taken.
 """
 
 """
@@ -35,9 +44,15 @@
 @apiParam {String} password User's password.
 
 @apiSuccess {String} status Successful Login.
+@apiSuccess {JSON} res Return contents.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok"
+    "res": {}
+}
 
-@apiError (Error 302) {String} UserNotVerified The <code>id</code> of the User was not verified.
-@apiError (Error 401) {String} UserNotFound The <code>id</code> of the User was not found.
+@apiError (Error 401) {String} UserNotFound The <code>username</code> was not found.
 """
 
 """
@@ -45,9 +60,14 @@
 @apiName LogoutUser
 @apiGroup User
 
-@apiParam {String} username User's username.
-
 @apiSuccess {String} status Successful Logout.
+@apiSuccess {JSON} res Return contents.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok"
+    "res": {}
+}
 """
 
 """
@@ -56,11 +76,31 @@
 @apiGroup UserProfile
 
 @apiSuccess {String} status Successful Get User Profile.
-@apiSuccess {String} username User's username.
-@apiSuccess {URL} avatar User's avatar URL.
-@apiSuccess {String} bio User's bio.
-@apiSuccess {String} region User's region
-@apiSuccess {String} verification_status User's verification status.
+@apiSuccess {JSON} res Return contents.
+@apiSuccessExample {json} Refugee-Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok"
+    "res": {
+        "username": "tiger",
+        "avatar": 10,
+        "bio": "Help me find a life here."
+        "region": "Skopje, Macedonia",
+        "verification_status": "unverified"
+    }
+}
+
+@apiSuccessExample {json} NGO-Worker-Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok"
+    "res": {
+        "username": "NGO_cat",
+        "avatar": 8,
+        "bio": "I wish for wolrd peace"
+        "region": "Skopje, Macedonia"
+    }
+}
 """
 
 """
@@ -69,11 +109,20 @@
 @apiGroup UserProfile
 
 @apiParam {String} username User's username.
-@apiParam {URL} avatar User's avatar URL.
-@apiParam {UserType} type User's type.
-@apiParam {String} region User's originated region.
+@apiParam {Number} avatar User's avatar index.
+@apiParam {String} type User's type.
+@apiParam {String} region User's region.
 
 @apiSuccess {String} status Successful Create User Profile.
+@apiSuccess {JSON} res Return contents.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok"
+    "res": {
+        "username": "giraffe"
+    }
+}
 """
 
 """
@@ -82,11 +131,20 @@
 @apiGroup UserProfile
 
 @apiParam {String} username User's username.
-@apiParam {URL} avatar User's avatar URL.
-@apiParam {UserType} type User's type.
-@apiParam {String} region User's originated region.
+@apiParam {Number} avatar User's avatar index.
+@apiParam {String} type User's type.
+@apiParam {String} region User's region.
 
 @apiSuccess {String} status Successful Update User Profile.
+@apiSuccess {JSON} res Return contents.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok"
+    "res": {
+        "username": "horse"
+    }
+}
 """
 
 """
@@ -95,56 +153,105 @@
 @apiGroup UserProfile
 
 @apiSuccess {String} status Successful Delete User Profile.
+@apiSuccess {JSON} res Return contents.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok"
+    "res": {
+        "username": "duck"
+    }
+}
 """
 
 """
-@api {get} /posts/:get Select User Post
+@api {get} /posts/:get Select a Post
 @apiName GetPost
 @apiGroup Posts
 
-@apiSuccess {String} status Successful Select User Post.
-@apiSuccess {String} username User's username.
-@apiSuccess {String} title Post's title.
-@apiSuccess {String} content Post's content.
-@apiSuccess {String} status Post's status.
-@apiSuccess {String} category Post's category.
-@apiSuccess {Time} date_time Post's date and time.
+@apiParam {Number} post_id Post's <code>id</code>.
+
+@apiSuccess {String} status Successful Select a Post.
+@apiSuccess {JSON} res Return contents.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok"
+    "res": {
+        "username": "alpaca",
+        "post_id": 4,
+        "title": "Food resources nearby",
+        "content": "Free food distribution for refugees at Frobes Ave!",
+        "status": "unverified",
+        "category": "living",
+        "date_time": "2020-01-01 19:00:00 GMT+2"
+    }
+}
 """
 
 """
-@api {post} /posts/:post Create User Post
+@api {post} /posts/:post Create a Post
 @apiName PostPost
 @apiGroup Posts
 
 @apiParam {String} title Post's title.
 @apiParam {String} content Post's content.
-@apiParam {String} status Post's status.
 @apiParam {String} category Post's category.
 @apiParam {Time} date_time Post's date and time.
 
-@apiSuccess {String} status Successful Create User Post.
+@apiSuccess {String} status Successful Create a Post.
+@apiSuccess {JSON} res Return contents.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok"
+    "res": {
+        "post_id": 8
+    }
+}
 """
 
 """
-@api {put} /posts/:put Update User Post
+@api {put} /posts/:put Update a Post
 @apiName PutPost
 @apiGroup Posts
 
+@apiParam {Number} post_id Post's <code>id</code>.
 @apiParam {String} title Post's title.
 @apiParam {String} content Post's content.
 @apiParam {String} status Post's status.
 @apiParam {String} category Post's category.
 @apiParam {Time} date_time Post's date and time.
 
-@apiSuccess {String} status Successful Update User Post.
+@apiSuccess {String} status Successful Update a Post.
+@apiSuccess {JSON} res Return contents.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok"
+    "res": {
+        "post_id": 8
+    }
+}
 """
 
 """
-@api {delete} /posts/:delete Delete User Post
+@api {delete} /posts/:delete Delete a Post
 @apiName DeletePost
 @apiGroup Posts
 
-@apiSuccess {String} status Successful Delete User Post.
+@apiParam {Number} post_id Post's <code>id</code>.
+
+@apiSuccess {String} status Successful Delete a Post.
+@apiSuccess {JSON} res Return contents.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok"
+    "res": {
+        "post_id": 8
+    }
+}
 """
 
 """
@@ -153,49 +260,75 @@
 @apiGroup Posts
 
 @apiSuccess {String} status Successful Send Post change notification.
-@apiParam {String} title Post's title.
+@apiSuccess {JSON} res Return contents.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok"
+    "res": {
+        "post_id": 8
+    }
+}
 """
 
 """
-@api {get} /comments/:get Select Comment
+@api {get} /comments/:get Select a Comment
 @apiName GetComments
 @apiGroup Comments
 
-@apiSuccess {String} status Successful Select Comment.
+@apiParam {Number} post_id Post's <code>id</code>.
+@apiParam {Number} comment_id Comment's <code>id</code>.
+
+@apiSuccess {String} status Successful Select Comment of a Post.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok"
+    "res": {
+        "post_id": 8,
+        "comment_id": 3,
+        "comment_owner": "sheep",
+        "comment_content": "Nice post!",
+        "date_time": "2020-01-01 19:50:00 GMT+2"
+    }
+}
 """
 
 """
-@api {post} /comments/:post Create User Post
+@api {post} /comments/:post Create a Comment
 @apiName PostComments
 @apiGroup Comments
 
-@apiParam {String} username User's username.
-@apiParam {String} title Post's title.
 @apiParam {String} content Comment's content.
 @apiParam {Time} date_time Comment's date and time.
 
-@apiSuccess {String} status Successful Post Comment.
+@apiSuccess {String} status Successful Post a Comment.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok"
+    "res": {
+        "post_id": 8,
+        "comment_id": 3
+    }
+}
 """
 
 """
-@api {put} /comments/:put Put User Post
-@apiName PutComments
-@apiGroup Comments
-
-@apiParam {String} username User's username.
-@apiParam {String} title Post's title.
-@apiParam {String} content Comment's content.
-@apiParam {Time} date_time Comment's date and time.
-
-@apiSuccess {String} status Successful Post Comment.
-"""
-
-"""
-@api {delete} /comments/:delete Delete User Post
+@api {delete} /comments/:delete Delete a Comment
 @apiName DeleteComments
 @apiGroup Comments
 
-@apiSuccess {String} status Successful Post Comment.
+@apiParam {Number} post_id Post's <code>id</code>.
+@apiParam {Number} comment_id Comment's <code>id</code>.
+
+@apiSuccess {String} status Successful Delete a Comment.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok"
+    "res": {}
+}
 """
 
 
