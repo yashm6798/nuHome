@@ -12,13 +12,6 @@
             "group": "Parameter",
             "type": "Number",
             "optional": false,
-            "field": "post_id",
-            "description": "<p>Post's <code>id</code>.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
             "field": "comment_id",
             "description": "<p>Comment's <code>id</code>.</p>"
           }
@@ -40,31 +33,24 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\"\n    \"res\": {}\n}",
+          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\"\n    \"res\": {\n        \"comment_id\": 3\n    }\n}",
           "type": "json"
         }
       ]
     },
     "version": "0.0.0",
-    "filename": "src/docs.py",
+    "filename": "src/comment.py",
     "groupTitle": "Comments"
   },
   {
     "type": "get",
     "url": "/comments/:get",
-    "title": "Select a Comment",
+    "title": "Select all Comments of a Post",
     "name": "GetComments",
     "group": "Comments",
     "parameter": {
       "fields": {
         "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "post_id",
-            "description": "<p>Post's <code>id</code>.</p>"
-          },
           {
             "group": "Parameter",
             "type": "Number",
@@ -83,20 +69,20 @@
             "type": "String",
             "optional": false,
             "field": "status",
-            "description": "<p>Successful Select Comment of a Post.</p>"
+            "description": "<p>Successful Select Comments of a Post.</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\"\n    \"res\": {\n        \"post_id\": 8,\n        \"comment_id\": 3,\n        \"comment_owner\": \"sheep\",\n        \"comment_content\": \"Nice post!\",\n        \"date_time\": \"2020-01-01 19:50:00 GMT+2\"\n    }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\"\n    \"res\": [\n        {\n            \"comment_id\": 1,\n            \"username\": \"sheep\",\n            \"content\": \"Nice post!\",\n            \"date_time\": \"2020-01-01 23:50:00 GMT+2\"\n        },\n        {\n            \"comment_id\": 2,\n            \"username\": \"wolverine\",\n            \"content\": \"Very helpful\",\n            \"date_time\": \"2020-01-01 23:55:00 GMT+2\"\n        },\n        {\n            \"comment_id\": 3,\n            \"username\": \"deer\",\n            \"content\": \"Sounds good, but where should we meet?\",\n            \"date_time\": \"2020-01-02 12:50:00 GMT+2\"\n        }\n    ]\n}",
           "type": "json"
         }
       ]
     },
     "version": "0.0.0",
-    "filename": "src/docs.py",
+    "filename": "src/comment.py",
     "groupTitle": "Comments"
   },
   {
@@ -110,6 +96,13 @@
         "Parameter": [
           {
             "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "post_id",
+            "description": "<p>Post's <code>id</code>.</p>"
+          },
+          {
+            "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "content",
@@ -117,7 +110,7 @@
           },
           {
             "group": "Parameter",
-            "type": "Time",
+            "type": "String",
             "optional": false,
             "field": "date_time",
             "description": "<p>Comment's date and time.</p>"
@@ -140,14 +133,101 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\"\n    \"res\": {\n        \"post_id\": 8,\n        \"comment_id\": 3\n    }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\"\n    \"res\": {\n        \"comment_id\": 3\n    }\n}",
           "type": "json"
         }
       ]
     },
     "version": "0.0.0",
-    "filename": "src/docs.py",
+    "filename": "src/comment.py",
     "groupTitle": "Comments"
+  },
+  {
+    "type": "get",
+    "url": "/ngo/:verified_users",
+    "title": "Get all verified users assigned to an NGO worker",
+    "name": "GetVerifiedUsers",
+    "group": "NGO",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Successful getting all verified users.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "res",
+            "description": "<p>Return contents.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\"\n    \"res\": {\n        \"usernames\": [\"rabbit\", \"monkey\", \"dolphin\"]\n    }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "src/ngo.py",
+    "groupTitle": "NGO"
+  },
+  {
+    "type": "put",
+    "url": "/ngo/:verify",
+    "title": "Verify a user",
+    "name": "VerifyUser",
+    "group": "NGO",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "username",
+            "description": "<p>User's username.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Successful Verify a User.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "res",
+            "description": "<p>Return contents.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\"\n    \"res\": {\n        \"username\": \"snake\"\n    }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "src/ngo.py",
+    "groupTitle": "NGO"
   },
   {
     "type": "delete",
@@ -196,28 +276,15 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "src/docs.py",
+    "filename": "src/post.py",
     "groupTitle": "Posts"
   },
   {
     "type": "get",
     "url": "/posts/:get",
-    "title": "Select a Post",
+    "title": "Select all Posts",
     "name": "GetPost",
     "group": "Posts",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "post_id",
-            "description": "<p>Post's <code>id</code>.</p>"
-          }
-        ]
-      }
-    },
     "success": {
       "fields": {
         "Success 200": [
@@ -226,7 +293,7 @@
             "type": "String",
             "optional": false,
             "field": "status",
-            "description": "<p>Successful Select a Post.</p>"
+            "description": "<p>Successful Select all Posts.</p>"
           },
           {
             "group": "Success 200",
@@ -240,13 +307,13 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\"\n    \"res\": {\n        \"username\": \"alpaca\",\n        \"post_id\": 4,\n        \"title\": \"Food resources nearby\",\n        \"content\": \"Free food distribution for refugees at Frobes Ave!\",\n        \"status\": \"unverified\",\n        \"category\": \"living\",\n        \"date_time\": \"2020-01-01 19:00:00 GMT+2\"\n    }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\"\n    \"res\": [\n        {\n            \"username\": \"alpaca\",\n            \"post_id\": 1,\n            \"title\": \"Food Resources Nearby\",\n            \"content\": \"Free food distribution for refugees at Frobes Ave!\",\n            \"status\": \"unverified\",\n            \"category\": \"living\",\n            \"date_time\": \"2020-01-01 19:00:00 GMT+2\"\n        },\n        {\n            \"username\": \"goat\",\n            \"post_id\": 2,\n            \"title\": \"Job Opportunities!\",\n            \"content\": \"Come get a job as a banker.\",\n            \"status\": \"verified\",\n            \"category\": \"living\",\n            \"date_time\": \"2020-01-01 19:58:00 GMT+2\"\n        },\n        {\n            \"username\": \"bear\",\n            \"post_id\": 3,\n            \"title\": \"New Gathering\",\n            \"content\": \"Gathering at Murray Ave!\",\n            \"status\": \"false\",\n            \"category\": \"social\",\n            \"date_time\": \"2020-01-01 22:00:00 GMT+2\"\n        }\n    ]\n}",
           "type": "json"
         }
       ]
     },
     "version": "0.0.0",
-    "filename": "src/docs.py",
+    "filename": "src/post.py",
     "groupTitle": "Posts"
   },
   {
@@ -277,13 +344,13 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\"\n    \"res\": {\n        \"post_id\": 8\n    }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\"\n    \"res\": {\n        \"post_ids\": [8, 10, 13]\n    }\n}",
           "type": "json"
         }
       ]
     },
     "version": "0.0.0",
-    "filename": "src/docs.py",
+    "filename": "src/post.py",
     "groupTitle": "Posts"
   },
   {
@@ -354,7 +421,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "src/docs.py",
+    "filename": "src/post.py",
     "groupTitle": "Posts"
   },
   {
@@ -403,7 +470,7 @@
           },
           {
             "group": "Parameter",
-            "type": "Time",
+            "type": "String",
             "optional": false,
             "field": "date_time",
             "description": "<p>Post's date and time.</p>"
@@ -439,7 +506,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "src/docs.py",
+    "filename": "src/post.py",
     "groupTitle": "Posts"
   },
   {
@@ -509,7 +576,7 @@
       }
     },
     "version": "0.0.0",
-    "filename": "src/docs.py",
+    "filename": "src/login.py",
     "groupTitle": "User"
   },
   {
@@ -546,7 +613,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "src/docs.py",
+    "filename": "src/login.py",
     "groupTitle": "User"
   },
   {
@@ -583,7 +650,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "src/docs.py",
+    "filename": "src/user_profile.py",
     "groupTitle": "UserProfile"
   },
   {
@@ -614,60 +681,31 @@
       "examples": [
         {
           "title": "Refugee-Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\"\n    \"res\": {\n        \"username\": \"tiger\",\n        \"avatar\": 10,\n        \"bio\": \"Help me find a life here.\"\n        \"region\": \"Skopje, Macedonia\",\n        \"verification_status\": \"unverified\"\n    }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\"\n    \"res\": {\n        \"username\": \"tiger\",\n        \"avatar\": 10,\n        \"bio\": \"Help me find a life here.\"\n        \"region\": \"Skopje, Macedonia\",\n        \"verification_status\": false\n    }\n}",
           "type": "json"
         },
         {
           "title": "NGO-Worker-Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\"\n    \"res\": {\n        \"username\": \"NGO_cat\",\n        \"avatar\": 8,\n        \"bio\": \"I wish for wolrd peace\"\n        \"region\": \"Skopje, Macedonia\"\n    }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\"\n    \"res\": {\n        \"username\": \"NGO_cat\",\n        \"avatar\": 8,\n        \"bio\": \"I wish for world peace.\"\n        \"region\": \"Skopje, Macedonia\"\n    }\n}",
+          "type": "json"
+        },
+        {
+          "title": "NGO-Admin-Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\"\n    \"res\": {\n        \"username\": \"NGO_elephant\",\n        \"avatar\": 4,\n        \"bio\": \"\"\n        \"region\": \"\"\n    }\n}",
           "type": "json"
         }
       ]
     },
     "version": "0.0.0",
-    "filename": "src/docs.py",
+    "filename": "src/user_profile.py",
     "groupTitle": "UserProfile"
   },
   {
-    "type": "post",
-    "url": "/user_profile/:post",
-    "title": "Create User Profile",
-    "name": "PostUserProfile",
+    "type": "get",
+    "url": "/user_profile/:sar",
+    "title": "Request SAR file",
+    "name": "GetUserSAR",
     "group": "UserProfile",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "username",
-            "description": "<p>User's username.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "avatar",
-            "description": "<p>User's avatar index.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "type",
-            "description": "<p>User's type.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "region",
-            "description": "<p>User's region.</p>"
-          }
-        ]
-      }
-    },
     "success": {
       "fields": {
         "Success 200": [
@@ -676,7 +714,7 @@
             "type": "String",
             "optional": false,
             "field": "status",
-            "description": "<p>Successful Create User Profile.</p>"
+            "description": "<p>Successful Request SAR file.</p>"
           },
           {
             "group": "Success 200",
@@ -690,13 +728,13 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\"\n    \"res\": {\n        \"username\": \"giraffe\"\n    }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\"\n    \"res\": {\n        \"url\": \"/tmp/sample_file.pdf\"\n    }\n}",
           "type": "json"
         }
       ]
     },
     "version": "0.0.0",
-    "filename": "src/docs.py",
+    "filename": "src/user_profile.py",
     "groupTitle": "UserProfile"
   },
   {
@@ -710,13 +748,6 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "username",
-            "description": "<p>User's username.</p>"
-          },
-          {
-            "group": "Parameter",
             "type": "Number",
             "optional": false,
             "field": "avatar",
@@ -726,15 +757,8 @@
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "type",
-            "description": "<p>User's type.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "region",
-            "description": "<p>User's region.</p>"
+            "field": "bio",
+            "description": "<p>User's bio.</p>"
           }
         ]
       }
@@ -767,7 +791,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "src/docs.py",
+    "filename": "src/user_profile.py",
     "groupTitle": "UserProfile"
   },
   {
@@ -851,7 +875,7 @@
       }
     },
     "version": "0.0.0",
-    "filename": "src/docs.py",
+    "filename": "src/login.py",
     "groupTitle": "User"
   }
 ]

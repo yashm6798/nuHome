@@ -3,6 +3,7 @@ define({
   "version": "0.3.0",
   "description": "Documentation for the REST api access provided at NuHome",
   "title": "NuHome Api doc",
+  "url": "http://www.silence-rain.com/apidocs",
   "template": {
     "withCompare": true,
     "withGenerator": true,
@@ -13,7 +14,7 @@ define({
   "apidoc": "0.3.0",
   "generator": {
     "name": "apidoc",
-    "time": "2020-04-10T18:49:02.823Z",
+    "time": "2020-04-12T02:56:30.039Z",
     "url": "http://apidocjs.com",
     "version": "0.20.1"
   }
