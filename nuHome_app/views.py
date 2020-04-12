@@ -27,7 +27,7 @@ def registration(request):
 		# First check if a username is already taken
 		if User.objects.filter(username__exact=params['username']):
 			# If username is taken, return error message as json response
-			response = json.dumps({'res': {'message': 'Username taken'}})
+			response = json.dumps({'status': 'err', 'res': {'message': 'Username taken'}})
 			status=400
 
 		# Otherwise, extract data from the body of POST request and store in the db
@@ -36,8 +36,12 @@ def registration(request):
 			new_user = User.objects.create_user(username=params['username'], password=params['password'])
 			# Save() saves the created object in the database
 			new_user.save()
+			# Assign an NGO user to the refugee
+			assigned_ngo = NGO_Profile.objects.filter(region=params['region']).order_by('no_of_refugees_assigned')[0]
+			assigned_ngo.no_of_refugees_assigned += 1
+			assigned_ngo.save()
 			# Create a refugee profile for the user
-			new_refugee = Refugee_Profile(user=new_user, region=params['region'])
+			new_refugee = Refugee_Profile(user=new_user, region=params['region'], assigned_ngo=assigned_ngo)
 			# Save the refugee profile
 			new_refugee.save()
 			# Authenticate function takes a username and password and authenticates using the Django User class (Not required here since data is just stored and is correct)
@@ -45,7 +49,7 @@ def registration(request):
 			# Login function generates a session for the user and logs the user in
 			login(request, new_user)
 			# Create a json response to return to the frontend with the required parameters
-			response = json.dumps({'res': {'username': new_user.username, 'region': new_refugee.region, 'bio': new_refugee.bio, 'avatar': new_refugee.avatar, 'user_type': 'refugee', 'isVerified': False}})
+			response = json.dumps({'status': 'ok', 'res': {'username': new_user.username, 'region': new_refugee.region, 'bio': new_refugee.bio, 'avatar': new_refugee.avatar, 'user_type': 'refugee', 'isVerified': False}})
 			status=200
 		
 		# Return an http response back to the frontend
@@ -63,7 +67,7 @@ def ngo_registration(request):
 		# Check if a username is already taken
 		if User.objects.filter(username__exact=params['username']):
 			# If username is taken, return error message as json response
-			response = json.dumps({'res': {'message': 'Username taken'}})
+			response = json.dumps({'status': 'err', 'res': {'message': 'Username taken'}})
 			status=400
 
 		# Otherwise, extract data from POST	request
@@ -73,15 +77,11 @@ def ngo_registration(request):
 			# Save in the db
 			new_user.save()
 			# Create an ngo user profile for the user
-			new_ngo_user = NGO_Profile(user=new_user, region=params['region'])
+			new_ngo_user = NGO_Profile(user=new_user, region=params['region'], no_of_refugees_assigned=0)
 			# Save the ngo user profile
 			new_ngo_user.save()
-			# Authenticate the username and password (Not required since data is just stored and is correct)
-			# new_user = authenticate(username=params['username'], password=params['password'])
-			# Login the user and generate session
-			# login(request, new_user)
 			# Create json response to return to frontend
-			response = json.dumps({'res': {'username': new_user.username, 'region': new_ngo_user.region, 'bio': new_ngo_user.bio, 'avatar': new_ngo_user.avatar, 'user_type': 'ngo_worker'}})
+			response = json.dumps({'status': 'ok', 'res': {'username': new_user.username, 'region': new_ngo_user.region, 'bio': new_ngo_user.bio, 'avatar': new_ngo_user.avatar, 'user_type': 'ngo_worker'}})
 			status=200
 		
 		# Return http response
@@ -99,7 +99,7 @@ def ngo_admin_registration(request):
 		# Check if a username is already taken
 		if User.objects.filter(username__exact=params['username']):
 			# If username is taken, return error message as json response
-			response = json.dumps({'res': {'message': 'Username taken'}})
+			response = json.dumps({'status': 'err', 'res': {'message': 'Username taken'}})
 			status=400
 
 		# Otherwise, extract data from POST	request
@@ -117,7 +117,7 @@ def ngo_admin_registration(request):
 			# Login the user and generate session
 			# login(request, new_user)
 			# Create json response to return to frontend
-			response = json.dumps({'res': {'username': new_user.username, 'region': new_ngo_admin.region, 'user_type': 'ngo_admin'}})
+			response = json.dumps({'status': 'ok', 'res': {'username': new_user.username, 'region': new_ngo_admin.region, 'user_type': 'ngo_admin'}})
 			status=200
 		
 		# Return http response
@@ -140,6 +140,7 @@ def login_action(request):
 
 		# Set status to 401 if authentication fails
 		if user is None:
+			response = json.dumps({'status': 'err', 'res': {}})
 			status=401
 
 		# Otherwise, login user and check the type of user before returning user data
@@ -158,20 +159,20 @@ def login_action(request):
 				# Check verification status of refugee and create json response accordingly
 
 				if(refugee.verification_status==False):
-					response = json.dumps({'res': {'username': user.username, 'region': refugee.region, 'bio': refugee.bio, 'avatar': refugee.avatar, 'user_type': 'refugee', 'isVerified': False}})
+					response = json.dumps({'status': 'ok', 'res': {'username': user.username, 'region': refugee.region, 'bio': refugee.bio, 'avatar': refugee.avatar, 'user_type': 'refugee', 'isVerified': False}})
 				else:
-					response = json.dumps({'res': {'username': user.username, 'region': refugee.region, 'bio': refugee.bio, 'avatar': refugee.avatar, 'user_type': 'refugee', 'isVerified': True}})
+					response = json.dumps({'status': 'ok', 'res': {'username': user.username, 'region': refugee.region, 'bio': refugee.bio, 'avatar': refugee.avatar, 'user_type': 'refugee', 'isVerified': True}})
 
 
 			# Check if the user is an ngo user by checking if user exists in any ngo profile entries and create json response accordingly
 			elif NGO_Profile.objects.filter(user=user).exists():
 				ngo_user = NGO_Profile.objects.get(user=user)
-				response = json.dumps({'res': {'username': user.username, 'region': ngo_user.region, 'bio': ngo_user.bio, 'avatar': ngo_user.avatar, 'user_type': 'ngo_worker'}})
+				response = json.dumps({'status': 'ok', 'res': {'username': user.username, 'region': ngo_user.region, 'bio': ngo_user.bio, 'avatar': ngo_user.avatar, 'user_type': 'ngo_worker'}})
 
 			# The only remaining option is of ngo admin. Retrieve admin profile and create json response
 			else:
 				ngo_admin = NGO_Admin_Profile.objects.get(user=user)
-				response = json.dumps({'res': {'username': user.username, 'region': ngo_admin.region, 'user_type': 'ngo_admin'}})
+				response = json.dumps({'status': 'ok', 'res': {'username': user.username, 'region': ngo_admin.region, 'user_type': 'ngo_admin'}})
 
 		return HttpResponse(response, content_type='application/json', status=status)
 
@@ -180,7 +181,7 @@ def logout_action(request):
 	# Logout functions expires the session of the user associated with the request
 	logout(request)
 	# No extra data to return in the Http response
-	response = {}
+	response = json.dumps({'status': 'ok', 'res': {}})
 	return HttpResponse(response, content_type='application/json', status=200)
 
 
