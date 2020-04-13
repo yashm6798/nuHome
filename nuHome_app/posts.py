@@ -37,7 +37,7 @@ def update_post_status(request):
 		# Load json from request into a dictionary
 		params = json.loads(request.body)
 		# Retrieve post for which status is to be updated
-		post = Post.objects.get(id=params['id'])
+		post = Post.objects.get(id=params['post_id'])
 		# Update status of the post
 		post.status = params['status']
 		# Save back to the db
@@ -57,19 +57,19 @@ def delete_post(request):
 		# Load json from the request into a dictionary
 		params = json.loads(request.body)
 		# Retrieve post object to be deleted
-		post = Post.objects.get(id=params['id'])
+		post = Post.objects.get(id=params['post_id'])
 		# Check that post exists in db
 		if post is not None:
 			# Delete the post from the db
 			post.delete()
 			status = 200
 			# Build json response
-			response = json.dumps({'status': 'ok', 'res': {'message': 'No post found'}})
+			response = json.dumps({'status': 'ok', 'res': {'post_id': params['id']}})
 		else:
 			# Return error
 			status = 400
 			# Build json response
-			response = json.dumps({'status': 'err', 'res': {'post_id': params['id']}})
+			response = json.dumps({'status': 'err', 'res': {'message': 'No post found'}})
 		
 		return HttpResponse(response, content_type='application/json', status=status)
 
@@ -87,23 +87,21 @@ def get_posts(request):
 				region = NGO_Profile.objects.get(user=request.user).region
 
 
-		# Retrieve all posts from the db which are posted by a user in the specific region
+		# Retrieve all posts from the db which are made by refugees from the same region
 		refugee_posts = Post.objects.exclude(user__in=User.objects.filter(refugee_profile__isnull=True)).filter(user__in=User.objects.filter(refugee_profile__region=region))
+		# Retrieve all posts from the db which are made by ngo users from the same region
 		ngo_posts = Post.objects.exclude(user__in=User.objects.filter(ngo_profile__isnull=True)).filter(user__in=User.objects.filter(ngo_profile__region=region))
-
+		# Append all posts together
 		all_posts = refugee_posts.union(ngo_posts).order_by('date_time')
+		# Initialze an empty list where all posts will be added in form of dictionary. This is done as querysets are not serializable so we convert them to list
 		posts = []
-
+		# Add all posts to the list
 		for post in all_posts:
-			posts.append({'id': post.id, 'username': post.user.username, 'title': post.title, 'content': post.content, 'category': post.category, 'status': post.status, 'date_time': post.date_time*1000})
-
-		#posts = list(refugee_posts.union(ngo_posts).order_by('date_time'))
-
-		#posts = serializers.serialize('json', posts)
+			posts.append({'post_id': post.id, 'username': post.user.username, 'title': post.title, 'content': post.content, 'category': post.category, 'status': post.status, 'date_time': post.date_time*1000})
 
 		status = 200
 		# Build json response
-		response = json.dumps({'status': 'ok', 'res': {'posts': posts}})
+		response = json.dumps({'status': 'ok', 'res': posts})
 		
 		return HttpResponse(response, content_type='application/json', status=status)
 

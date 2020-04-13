@@ -15,17 +15,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from nuHome_app import views, posts
+from nuHome_app import authentication, posts, comments
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', views.login_action, name='login'),
-    path('registration/', views.registration, name='refugee_registration'),
-    path('ngo_registration/', views.ngo_registration, name='ngo_registration'),
-    path('ngo_admin_registration/', views.ngo_admin_registration, name='ngo_admin_registration'),
-    path('logout/', views.logout_action, name='logout'),
+    path('login/', authentication.login_action, name='login'),
+    path('registration/', authentication.registration, name='refugee_registration'),
+    path('ngo_registration/', authentication.ngo_registration, name='ngo_registration'),
+    path('ngo_admin_registration/', authentication.ngo_admin_registration, name='ngo_admin_registration'),
+    path('logout/', authentication.logout_action, name='logout'),
     path('new_post/', posts.create_post, name='create_post'),
     path('update_post_status/', posts.update_post_status, name='update_post_status'),
     path('delete_post/', posts.delete_post, name='delete_post'),
     path('get_all_posts/', posts.get_posts, name='get_posts'),
+    path('new_comment/', comments.create_comment, name='create_comment'),
+    path('delete_comment/', comments.delete_comment, name='delete_comment'),
+    path(r'^get_all_comments/$', comments.get_comments, name='get_comments'),
 ]
