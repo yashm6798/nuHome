@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import *
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+import os
 # Create your views here.
 
 # STATUS CODE 200 = OKAY
@@ -81,6 +82,9 @@ def ngo_registration(request):
 			new_ngo_user = NGO_Profile(user=new_user, region=params['region'], no_of_refugees_assigned=0)
 			# Save the ngo user profile
 			new_ngo_user.save()
+			# Make directory where encryption key will be stored
+			key_path = "keys/" + new_user.username
+			os.makedirs(key_path)
 			# Create an encryption key for the ngo
 			write_key(new_user.username)
 			# Create json response to return to frontend
@@ -200,7 +204,7 @@ def get_unverified_users(request):
 			unverified_refugee_usernames = []
 			# Append usernames to this list
 			for refugee in unverified_refugees:
-				unverified_refugee_usernames.append(refugee.user.username)
+				unverified_refugee_usernames.append({'username': refugee.user.username, 'document': refugee.verification_document})
 			# Build json response
 			response = json.dumps({'status': 'ok', 'res': {'usernames': unverified_refugee_usernames}})
 			status = 200
@@ -219,7 +223,7 @@ def verify_user(request):
 				# Load json from request into a dictionary
 				params = json.loads(request.body)
 				# Get refugee profile for username in request parameter
-				refugee = Refugee_Profile.objects.get(user.username=params['username'])
+				refugee = Refugee_Profile.objects.get(user__username=params['username'])
 				# Set verification status to true for the refugee
 				refugee.verification_status = True
 				# Delete verification document
@@ -253,7 +257,10 @@ def file_upload(request):
 			# Save in the db
 			refugee.save()
 			enc_key = load_key(refugee.assigned_ngo.user.username)
-			encrypt(refugee.verification_document.path)
+			encrypt(refugee.verification_document.path, enc_key)
+			status = 200
+			# Build json response
+			response = json.dumps({'status': 'ok', 'res': {}})
 
 #Below are the placeholders for the functions yet to be implemented
 

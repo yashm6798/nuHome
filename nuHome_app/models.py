@@ -13,7 +13,7 @@ class Refugee_Profile(models.Model):
 	bio = models.TextField(blank=True)
 	region = models.CharField(max_length=20)
 	verification_status = models.BooleanField(default=False)
-	verification_document = models.FileField(upload_to=user_directory_path)
+	verification_document = models.FileField(upload_to=user_directory_path, null=True)
 	assigned_ngo = models.ForeignKey('NGO_Profile', on_delete=models.PROTECT)
 
 class NGO_Profile(models.Model):

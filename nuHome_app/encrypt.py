@@ -1,4 +1,6 @@
 from cryptography.fernet import Fernet
+import os
+
 
 
 def write_key(username):
@@ -6,7 +8,7 @@ def write_key(username):
 	# Create a random symmetric key
 	key = Fernet.generate_key()
 	# Write the key to a file
-	path = "keys/"+str(username)+"key.key"
+	path = "keys/"+str(username)+"/key.key"
 	with open(path, "wb") as key_file:
 		key_file.write(key)
 
@@ -14,7 +16,7 @@ def write_key(username):
 def load_key(username):
 	
 	#Loads the key from the current directory named `key.key`
-	path = "keys/"+str(username)+"key.key"
+	path = "keys/"+str(username)+"/key.key"
 	return open(path, "rb").read()
 
 
