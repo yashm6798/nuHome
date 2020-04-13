@@ -19,7 +19,7 @@ def create_comment(request):
 		# Load json from request into a dictionary
 		params = json.loads(request.body)
 		# Create a new Comment object
-		new_comment = Comment(user=request.user, content=params['content'], post=Post.objects.get(id=params['id']), date_time=int(time.time()))
+		new_comment = Comment(user=request.user, content=params['content'], post=Post.objects.get(id=params['post_id']), date_time=int(time.time()))
 		# Save to the db
 		new_comment.save()
 		# Build json response 

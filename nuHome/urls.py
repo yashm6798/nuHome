@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
 from nuHome_app import authentication, posts, comments
 
 urlpatterns = [
@@ -30,5 +30,5 @@ urlpatterns = [
     path('get_all_posts/', posts.get_posts, name='get_posts'),
     path('new_comment/', comments.create_comment, name='create_comment'),
     path('delete_comment/', comments.delete_comment, name='delete_comment'),
-    path(r'^get_all_comments/$', comments.get_comments, name='get_comments'),
+    re_path(r'^get_comments/$', comments.get_comments, name='get_comments'),
 ]
