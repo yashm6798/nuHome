@@ -23,6 +23,8 @@ urlpatterns = [
     path('registration/', authentication.registration, name='refugee_registration'),
     path('ngo_registration/', authentication.ngo_registration, name='ngo_registration'),
     path('ngo_admin_registration/', authentication.ngo_admin_registration, name='ngo_admin_registration'),
+    re_path(r'^get_unverified_users/$', authentication.get_unverified_users, name='get_unverified_users'),
+    path('verify_user/', authentication.verify_user, name='verify_user')
     path('logout/', authentication.logout_action, name='logout'),
     path('new_post/', posts.create_post, name='create_post'),
     path('update_post_status/', posts.update_post_status, name='update_post_status'),
@@ -31,4 +33,5 @@ urlpatterns = [
     path('new_comment/', comments.create_comment, name='create_comment'),
     path('delete_comment/', comments.delete_comment, name='delete_comment'),
     re_path(r'^get_comments/$', comments.get_comments, name='get_comments'),
+
 ]

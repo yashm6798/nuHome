@@ -213,8 +213,10 @@ def verify_user(request):
 	if request.method == 'PUT':
 		# Confirm that the requesting user is an ngo
 			if NGO_Profile.objects.get(user=request.user):
+				# Load json from request into a dictionary
+				params = json.loads(request.body)
 				# Get refugee profile for username in request parameter
-				refugee = Refugee_Profile.objects.get(user.username=request.GET.get('username'))
+				refugee = Refugee_Profile.objects.get(user.username=params['username'])
 				# Set verification status to true for the refugee
 				refugee.verification_status = True
 				# Save back to db
