@@ -49,7 +49,7 @@ def registration(request):
 			# Login function generates a session for the user and logs the user in
 			login(request, new_user)
 			# Create a json response to return to the frontend with the required parameters
-			response = json.dumps({'status': 'ok', 'res': {'username': new_user.username, 'region': new_refugee.region, 'bio': new_refugee.bio, 'avatar': new_refugee.avatar, 'user_type': 'refugee', 'isVerified': False}})
+			response = json.dumps({'status': 'ok', 'res': {'username': new_user.username, 'region': new_refugee.region, 'bio': new_refugee.bio, 'avatar': new_refugee.avatar, 'user_type': 'refugee', 'isVerified': False, 'assigned_ngo': assigned_ngo.user.username}})
 			status=200
 		
 		# Return an http response back to the frontend
@@ -159,9 +159,9 @@ def login_action(request):
 				# Check verification status of refugee and create json response accordingly
 
 				if(refugee.verification_status==False):
-					response = json.dumps({'status': 'ok', 'res': {'username': user.username, 'region': refugee.region, 'bio': refugee.bio, 'avatar': refugee.avatar, 'user_type': 'refugee', 'isVerified': False}})
+					response = json.dumps({'status': 'ok', 'res': {'username': user.username, 'region': refugee.region, 'bio': refugee.bio, 'avatar': refugee.avatar, 'user_type': 'refugee', 'isVerified': False, 'assigned_ngo': refugee.assigned_ngo.user.username}})
 				else:
-					response = json.dumps({'status': 'ok', 'res': {'username': user.username, 'region': refugee.region, 'bio': refugee.bio, 'avatar': refugee.avatar, 'user_type': 'refugee', 'isVerified': True}})
+					response = json.dumps({'status': 'ok', 'res': {'username': user.username, 'region': refugee.region, 'bio': refugee.bio, 'avatar': refugee.avatar, 'user_type': 'refugee', 'isVerified': True, 'assigned_ngo': refugee.assigned_ngo.user.username}})
 
 
 			# Check if the user is an ngo user by checking if user exists in any ngo profile entries and create json response accordingly

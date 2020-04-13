@@ -8,7 +8,7 @@ class Refugee_Profile(models.Model):
 	bio = models.TextField(blank=True)
 	region = models.CharField(max_length=20)
 	verification_status = models.BooleanField(default=False)
-	assigned_ngo = models.ForeignKey(NGO_Profile, on_delete=models.PROTECT)
+	assigned_ngo = models.ForeignKey('NGO_Profile', on_delete=models.PROTECT)
 
 class NGO_Profile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -27,7 +27,7 @@ class Post(models.Model):
 	content = models.TextField(blank=False)
 	status = models.CharField(max_length=10, default='unverified')
 	category = models.CharField(max_length=13)
-	date_time = models.DateTimeField(auto_now_add=True)
+	date_time = models.IntegerField()
 
 class Comment(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
