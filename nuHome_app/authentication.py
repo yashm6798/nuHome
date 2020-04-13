@@ -182,9 +182,52 @@ def logout_action(request):
 	logout(request)
 	# No extra data to return in the Http response
 	response = json.dumps({'status': 'ok', 'res': {}})
-	return HttpResponse(response, content_type='application/json', status=200)
+	status = 200
+	return HttpResponse(response, content_type='application/json', status=status)
 
+def get_unverified_users(request):
 
+	if request.method == 'GET':
+		# Confirm that the requesting user is an ngo
+		ngo_user = NGO_Profile.objects.get(user=request.user)
+		if ngo_user is not None:
+			# Get all refugees who have requesting user as assigned_ngo and filter based on verification status
+			unverified_refugees = Refugee_Profile.objects.filter(assigned_ngo=ngo_user).filter(verification_status=False)
+			# Initialize empty list which will contain usernames of all unverified refugees assigned to ngo
+			unverified_refugee_usernames = []
+			# Append usernames to this list
+			for refugee in unverified_refugees:
+				unverified_refugee_usernames.append(refugee.user.username)
+			# Build json response
+			response = json.dumps({'status': 'ok', 'res': {'usernames': unverified_refugee_usernames}})
+			status = 200
+
+		else:
+			response = json.dumps({'status': 'err', 'res': {'message': 'User is not verified as ngo'}})
+			status = 400
+		
+		return HttpResponse(response, content_type='application/json', status=status)
+
+def verify_user(request):
+
+	if request.method == 'PUT':
+		# Confirm that the requesting user is an ngo
+			if NGO_Profile.objects.get(user=request.user):
+				# Get refugee profile for username in request parameter
+				refugee = Refugee_Profile.objects.get(user.username=request.GET.get('username'))
+				# Set verification status to true for the refugee
+				refugee.verification_status = True
+				# Save back to db
+				refugee.save()
+				status = 200
+				# Build json response
+				response = json.dumps({'status': 'ok', 'res': {'username': refugee.user.username}})
+
+			else:
+				response = json.dumps({'status': 'err', 'res': {'message': 'User is not verified as ngo'}})
+				status = 400
+			
+			return HttpResponse(response, content_type='application/json', status=status)
 #Below are the placeholders for the functions yet to be implemented
 
 '''
