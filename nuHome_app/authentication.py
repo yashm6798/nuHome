@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from nuHome_app.models import *
+from nuHome_app.encrypt import encrypt, load_key, write_key
 from django.http import HttpResponse, Http404
 import json
 from django.views.decorators.csrf import csrf_exempt
@@ -80,6 +81,8 @@ def ngo_registration(request):
 			new_ngo_user = NGO_Profile(user=new_user, region=params['region'], no_of_refugees_assigned=0)
 			# Save the ngo user profile
 			new_ngo_user.save()
+			# Create an encryption key for the ngo
+			write_key(new_user.username)
 			# Create json response to return to frontend
 			response = json.dumps({'status': 'ok', 'res': {'username': new_user.username, 'region': new_ngo_user.region, 'bio': new_ngo_user.bio, 'avatar': new_ngo_user.avatar, 'user_type': 'ngo_worker'}})
 			status=200
@@ -219,6 +222,8 @@ def verify_user(request):
 				refugee = Refugee_Profile.objects.get(user.username=params['username'])
 				# Set verification status to true for the refugee
 				refugee.verification_status = True
+				# Delete verification document
+				refugee.verification_document.delete()
 				# Save back to db
 				refugee.save()
 				status = 200
@@ -230,24 +235,31 @@ def verify_user(request):
 				status = 400
 			
 			return HttpResponse(response, content_type='application/json', status=status)
+
+
+def file_upload(request):
+
+	if request.method == 'POST':
+		# Confirm there is a file in the request
+		if request.FILES == None:
+			response = json.dumps({'status': 'err', 'res': {'message': 'No file found'}})
+			status = 400
+
+		else:
+			# Retrieve the refugee who uploaded the file
+			refugee = Refugee_Profile.objects.get(user=request.user)
+			# Load the file in candidate profile model field
+			refugee.verification_document = request.FILES['document']
+			# Save in the db
+			refugee.save()
+			enc_key = load_key(refugee.assigned_ngo.user.username)
+			encrypt(refugee.verification_document.path)
+
 #Below are the placeholders for the functions yet to be implemented
 
 '''
-
-def update_verification_status(request):
-	#Function to change the verification status of refugees
-
 def chat_action(request):
 	#Function to implement 1-to-1 chat between ngos and refugees
-
-def post_action(request):
-	#Function to implement post functionality
-
-def comment_action(request):
-	#Function to implement comment functionality
-
-def update_post_status(request):
-	#Function to update post status
 
 def update_profile(request):
 	#Function to update profile for users

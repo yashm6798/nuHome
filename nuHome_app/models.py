@@ -2,12 +2,18 @@ from django.db import models
 from django.contrib.auth.models import User
 
 # Create your models here.
+
+def user_directory_path(instance, filename):
+	# file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+	return 'user_{0}'.format(instance.user.id)
+
 class Refugee_Profile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	avatar = models.CharField(blank=True, max_length=2)
 	bio = models.TextField(blank=True)
 	region = models.CharField(max_length=20)
 	verification_status = models.BooleanField(default=False)
+	verification_document = models.FileField(upload_to=user_directory_path)
 	assigned_ngo = models.ForeignKey('NGO_Profile', on_delete=models.PROTECT)
 
 class NGO_Profile(models.Model):
