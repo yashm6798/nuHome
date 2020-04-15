@@ -64,7 +64,7 @@ def delete_post(request):
 			post.delete()
 			status = 200
 			# Build json response
-			response = json.dumps({'status': 'ok', 'res': {'post_id': params['id']}})
+			response = json.dumps({'status': 'ok', 'res': {'post_id': params['post_id']}})
 		else:
 			# Return error
 			status = 400
