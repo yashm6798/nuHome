@@ -199,14 +199,14 @@ def get_unverified_users(request):
 		ngo_user = NGO_Profile.objects.get(user=request.user)
 		if ngo_user is not None:
 			# Get all refugees who have requesting user as assigned_ngo and filter based on verification status
-			unverified_refugees = Refugee_Profile.objects.filter(assigned_ngo=ngo_user).filter(verification_status=False)
+			unverified_refugee_objects = Refugee_Profile.objects.filter(assigned_ngo=ngo_user).filter(verification_status=False)
 			# Initialize empty list which will contain usernames of all unverified refugees assigned to ngo
-			unverified_refugee_usernames = []
+			unverified_refugee = []
 			# Append usernames to this list
-			for refugee in unverified_refugees:
-				unverified_refugee_usernames.append({'username': refugee.user.username, 'document': refugee.verification_document})
+			for refugee in unverified_refugees_objects:
+				unverified_refugees.append({'username': refugee.user.username, 'document': refugee.verification_document})
 			# Build json response
-			response = json.dumps({'status': 'ok', 'res': {'usernames': unverified_refugee_usernames}})
+			response = json.dumps({'status': 'ok', 'res': {'unverified_refugees': unverified_refugees}})
 			status = 200
 
 		else:

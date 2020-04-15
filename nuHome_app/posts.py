@@ -78,13 +78,14 @@ def get_posts(request):
 
 	if request.method == 'GET':
 
-
 		if Refugee_Profile.objects.filter(user=request.user).exists():
-				region = Refugee_Profile.objects.get(user=request.user).region
+				user_profile = Refugee_Profile.objects.get(user=request.user)
+				region = user_profile.region
 
 
 		elif NGO_Profile.objects.filter(user=request.user).exists():
-				region = NGO_Profile.objects.get(user=request.user).region
+				user_profile = NGO_Profile.objects.get(user=request.user)
+				region = user_profile.region
 
 
 		# Retrieve all posts from the db which are made by refugees from the same region
@@ -97,7 +98,8 @@ def get_posts(request):
 		posts = []
 		# Add all posts to the list
 		for post in all_posts:
-			posts.append({'post_id': post.id, 'username': post.user.username, 'title': post.title, 'content': post.content, 'category': post.category, 'status': post.status, 'date_time': post.date_time*1000})
+			user = post.user
+			posts.append({'post_id': post.id, 'user': {'username': request.user.username, 'bio': user_profile.bio, 'avatar': user_profile.avatar}, 'title': post.title, 'content': post.content, 'category': post.category, 'status': post.status, 'date_time': post.date_time*1000})
 
 		status = 200
 		# Build json response
