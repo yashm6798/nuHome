@@ -45,7 +45,7 @@ def registration(request):
 			# Create a refugee profile for the user
 			new_refugee = Refugee_Profile(user=new_user, region=params['region'], assigned_ngo=assigned_ngo)
 			# Save the refugee profile
-			new_refugee.save()
+			new_refugee.save(False)
 			# Authenticate function takes a username and password and authenticates using the Django User class (Not required here since data is just stored and is correct)
 			new_user = authenticate(username=params['username'], password=params['password'])
 			# Login function generates a session for the user and logs the user in
@@ -255,29 +255,9 @@ def file_upload(request):
 			# Load the file in candidate profile model field
 			refugee.verification_document = request.FILES['document']
 			# Save in the db
-			refugee.save()
-			enc_key = load_key(refugee.assigned_ngo.user.username)
-			encrypt(refugee.verification_document.path, enc_key)
+			refugee.save(True)
 			status = 200
 			# Build json response
 			response = json.dumps({'status': 'ok', 'res': {}})
+			return HttpResponse(response, content_type='application/json', status=status)
 
-#Below are the placeholders for the functions yet to be implemented
-
-'''
-def chat_action(request):
-	#Function to implement 1-to-1 chat between ngos and refugees
-
-def update_profile(request):
-	#Function to update profile for users
-
-def subject_access_request(request):
-	#Function to implement subject access request
-
-def delete_file(request):
-	#Function to delete files uploaded by users
-
-def encrypt_file(request):
-	#Function to encrypt file
-
-'''

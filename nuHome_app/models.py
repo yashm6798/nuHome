@@ -1,11 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from nuHome_app.encrypt import load_key
+from cryptography.fernet import Fernet
+from django.core.files import File
 # Create your models here.
 
-def user_directory_path(instance, filename):
-	# file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
-	return 'user_{0}'.format(instance.user.id)
+def user_directory_path(instance):
+	# file will be uploaded to MEDIA_ROOT/username
+	return '{0}'.format(instance.user.username)
 
 class Refugee_Profile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -15,6 +17,28 @@ class Refugee_Profile(models.Model):
 	verification_status = models.BooleanField(default=False)
 	verification_document = models.FileField(upload_to=user_directory_path, null=True)
 	assigned_ngo = models.ForeignKey('NGO_Profile', on_delete=models.PROTECT)
+
+	def encrypt(self, file_object, key):
+
+		# First initialize the Fernet object
+		f = Fernet(key)
+		# Read all data from the file
+		with file_object.open("rb") as file:
+			file_data = file.read()
+		# Now encrypt this data
+		encrypted_data = f.encrypt(file_data)
+		# Overwrite the file original file with encrypted data
+		file_path = "documents/" + user_directory_path(self)
+		with open(file_path, "wb") as file:
+			file.write(encrypted_data)
+			self.verification_document = file_path
+			super().save()
+
+
+	def save(self, verification_document_upload):
+		if verification_document_upload == True:
+			enc_key = load_key(self.assigned_ngo.user.username)
+			self.encrypt(self.verification_document, enc_key)
 
 class NGO_Profile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)

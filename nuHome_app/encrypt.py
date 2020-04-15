@@ -1,8 +1,6 @@
 from cryptography.fernet import Fernet
 import os
 
-
-
 def write_key(username):
 
 	# Create a random symmetric key

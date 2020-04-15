@@ -12,7 +12,7 @@ def decrypt(filename, key):
 	# Create a Fernet object first
 	f = Fernet(key)
 	# Set path to documents folder
-	path = "verification/" + filename
+	path = "documents/" + filename
 	# Read the encrypted data
 	with open(path, "rb") as file:
 		encrypted_data = file.read()
