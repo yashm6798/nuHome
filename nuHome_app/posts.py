@@ -98,11 +98,11 @@ def get_posts(request):
 		for post in all_posts:
 
 			user_object = post.user
-			if Refugee_Profile.objects.filter(user=request.user).exists():
+			if Refugee_Profile.objects.filter(user=post.user).exists():
 				user_profile = Refugee_Profile.objects.get(user=user_object)
 
 
-			elif NGO_Profile.objects.filter(user=request.user).exists():
+			elif NGO_Profile.objects.filter(user=post.user).exists():
 				user_profile = NGO_Profile.objects.get(user=user_object)
 
 			posts.append({'post_id': post.id, 'user': {'username': user_object.username, 'bio': user_profile.bio, 'avatar': user_profile.avatar}, 'title': post.title, 'content': post.content, 'category': post.category, 'status': post.status, 'date_time': post.date_time*1000})
