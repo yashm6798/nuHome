@@ -39,6 +39,8 @@ class Refugee_Profile(models.Model):
 		if verification_document_upload == True:
 			enc_key = load_key(self.assigned_ngo.user.username)
 			self.encrypt(self.verification_document, enc_key)
+		else:
+			super().save()
 
 class NGO_Profile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
