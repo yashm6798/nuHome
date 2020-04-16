@@ -36,15 +36,14 @@ def registration(request):
 		else:
 			# First create a Django user object
 			new_user = User.objects.create_user(username=params['username'], password=params['password'])
-			# Save() saves the created object in the database
-			new_user.save()
 			# Assign an NGO user to the refugee
 			assigned_ngo = NGO_Profile.objects.filter(region=params['region']).order_by('no_of_refugees_assigned')[0]
 			assigned_ngo.no_of_refugees_assigned += 1
 			assigned_ngo.save()
 			# Create a refugee profile for the user
 			new_refugee = Refugee_Profile(user=new_user, region=params['region'], assigned_ngo=assigned_ngo)
-			# Save the refugee profile
+			# Save the refugee profile and user
+			new_user.save()
 			new_refugee.save(False)
 			# Authenticate function takes a username and password and authenticates using the Django User class (Not required here since data is just stored and is correct)
 			new_user = authenticate(username=params['username'], password=params['password'])
