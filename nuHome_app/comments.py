@@ -66,7 +66,7 @@ def get_comments(request):
 		comments = []
 		# Add all comments to the list
 		for comment in all_comments:
-			comments.append({'comment_id': comment.id, 'username': comment.user.username, 'content': post.content, 'date_time': post.date_time*1000, 'post_id': comment.post.id})
+			comments.append({'comment_id': comment.id, 'username': comment.user.username, 'content': comment.content, 'date_time': comment.date_time*1000, 'post_id': comment.post.id})
 
 		status = 200
 		# Build json response

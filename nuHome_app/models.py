@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from nuHome_app.encrypt import load_key
 from cryptography.fernet import Fernet
 from django.core.files import File
+import os
 # Create your models here.
 
 def user_directory_path(instance):
@@ -28,7 +29,10 @@ class Refugee_Profile(models.Model):
 		# Now encrypt this data
 		encrypted_data = f.encrypt(file_data)
 		# Overwrite the file original file with encrypted data
-		file_path = "documents/" + user_directory_path(self)
+		documents_directory = "documents/"
+		if not os.path.exists(documents_directory):
+			os.makedirs(documents_directory)
+		file_path = documents_directory + user_directory_path(self)
 		with open(file_path, "wb") as file:
 			file.write(encrypted_data)
 			self.verification_document = file_path

@@ -10,6 +10,7 @@ from django.core import serializers
 # STATUS CODE 200 = OKAY
 # STATUS CODE 400 = ERROR
 
+
 def update_profile(request):
 
 	# This function does not require a GET method

@@ -29,4 +29,4 @@ if len(sys.argv) == 2:
 	decrypt(file, key)
 
 else:
-	print("Please run the command as python decryption.py <filename>")
+	print("Please run the command as python decrypt.py <filename>")
