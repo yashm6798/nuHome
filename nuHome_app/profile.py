@@ -20,7 +20,6 @@ def update_profile(request):
 		# Load json from request into a dictionary
 		params = json.loads(request.body)
 		username = ""
-		avatar = params['avatar']
 		bio = params['bio']
 
 		# Check whether user is in refugee profile
@@ -38,7 +37,6 @@ def update_profile(request):
 		elif NGO_Profile.objects.filter(user=request.user).exists():
 			username = NGO_Profile.objects.get(user=request.user).user.username
 			ngo = NGO_Profile.objects.get(user__username=username)
-			ngo.avatar = avatar
 			ngo.bio = bio
 			ngo.save()
 
