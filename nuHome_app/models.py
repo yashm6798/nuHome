@@ -76,3 +76,13 @@ class Message(models.Model):
 	to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='message_to')
 	date_time = models.DateTimeField(auto_now_add=True)
 	content = models.TextField(blank=False)
+
+	def last_10_messages(user):
+		from_messages = Message.objects.filter(from_user=user)
+		to_messages = Message.objects.filter(to_user=user)
+		return from_messages.union(to_messages).order_by('date_time').all()[:10]
+
+class Connection(models.Model):
+	channel_name = models.TextField(blank=False)
+	user = models.ForeignKey(User, on_delete=models.CASCADE)
+

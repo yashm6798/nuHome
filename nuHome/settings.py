@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'nuHome_app',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -126,3 +127,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'documents/')
+
+
+ASGI_APPLICATION = 'nuHome.routing.application'

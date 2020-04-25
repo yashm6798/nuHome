@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path
-from nuHome_app import authentication, posts, comments, profile, sar
+from nuHome_app import authentication, posts, comments, profile, sar, chat
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -42,4 +42,6 @@ urlpatterns = [
     path('update_user_profile/', profile.update_profile, name='update_user_profile'),
     path('delete_user_profile/', profile.delete_profile, name='delete_user_profile'),
     path('get_sar/', sar.get_sar, name='get_sar'),
+
+    path('chat/', chat.room, name='chat'),
 ]
