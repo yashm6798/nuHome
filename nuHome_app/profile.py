@@ -29,8 +29,6 @@ def update_profile(request):
 			username = Refugee_Profile.objects.get(user=request.user).user.username
 			# Load refugee object from profile
 			refugee = Refugee_Profile.objects.get(user__username=username)
-			# Set avatar in profile
-			refugee.avatar = avatar
 			# Set bio in profile
 			refugee.bio = bio
 			# save the modification to database

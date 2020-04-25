@@ -39,7 +39,7 @@ class Refugee_Profile(models.Model):
 			super().save()
 
 
-	def save(self, verification_document_upload):
+	def save(self, verification_document_upload=False):
 		if verification_document_upload == True:
 			enc_key = load_key(self.assigned_ngo.user.username)
 			self.encrypt(self.verification_document, enc_key)
