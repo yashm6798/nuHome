@@ -14,6 +14,7 @@ import os
 # STATUS CODE 400 = ERROR
 # STATUS CODE 401 = INCORRECT CREDENTIALS
 
+@csrf_exempt
 def registration(request):
 	# GET request is only used to return a cookie with csrf token which needs to be returned for POST requests
 
@@ -129,6 +130,7 @@ def ngo_admin_registration(request):
 		# Return http response
 		return HttpResponse(response, content_type='application/json', status=status)
 
+@csrf_exempt
 def login_action(request):
 	# Return cookie to be used for POST requests
 
@@ -258,5 +260,6 @@ def file_upload(request):
 			status = 200
 			# Build json response
 			response = json.dumps({'status': 'ok', 'res': {}})
-			return HttpResponse(response, content_type='application/json', status=status)
+		
+		return HttpResponse(response, content_type='application/json', status=status)
 
