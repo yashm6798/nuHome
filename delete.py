@@ -1,13 +1,17 @@
-import os
+import subprocess
 import sys
 
 if len(sys.argv) == 2:
-	
-	file = sys.argv[1]
+
 	print("Securely deleting file...")
-	command = "rm -P " + file
-	os.system(command)
-	print("Deletion successful")
+	file = sys.argv[1]
+	try:
+		subprocess.call(['rm', '-P'] + [file])
+		print("Deletion successful")
+	except OSError:
+		print ('Delete failed. Please ensure you use the correct filename and extension')
+
 
 else:
-	print("Please run the command as python decrypt.py <filename>")
+	print("Please run the command as python delete.py <filename>")
+	print("Also make sure to use the file extension in filename is applicable.")
