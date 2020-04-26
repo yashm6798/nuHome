@@ -108,9 +108,6 @@ def get_sar(request):
 		# Writing to sample.json in the tmp directory
 		with open(url, "w") as outfile: 
 		    outfile.write(json_object)
-
-		# if not verification_status:
-		# 	pass
 		
 		# Build json response
 		response = json.dumps({'status': 'ok', 'res': {'url': url}})

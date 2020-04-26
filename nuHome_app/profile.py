@@ -144,12 +144,14 @@ def get_profile(request):
 def get_avatar(request):
 
     if request.method == 'GET':
-
+        # Load json from request into a dictionary
         params = json.loads(request.body)
+        # Get user object from username
         user = User.objects.get(username=params['username'])
         avatar = None
         status = 200
 
+        # Get avatar of the user
         if Refugee_Profile.objects.filter(user=user).exists():
             avatar = Refugee_Profile.objects.get(user=user).avatar
 

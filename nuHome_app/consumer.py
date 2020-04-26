@@ -1,3 +1,7 @@
+'''
+This file is for websocket implementation of django channel chat server.
+We've deprecated this implementation and moved to new_chat.py as http requests.
+'''
 import json
 from channels.generic.websocket import WebsocketConsumer
 from django.contrib.auth.models import User
