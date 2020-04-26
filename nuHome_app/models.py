@@ -81,8 +81,3 @@ class Message(models.Model):
 		from_messages = Message.objects.filter(from_user=user)
 		to_messages = Message.objects.filter(to_user=user)
 		return from_messages.union(to_messages).order_by('date_time').all()[:10]
-
-class Connection(models.Model):
-	channel_name = models.TextField(blank=False)
-	user = models.ForeignKey(User, on_delete=models.CASCADE)
-

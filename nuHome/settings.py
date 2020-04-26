@@ -130,3 +130,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'documents/')
 
 
 ASGI_APPLICATION = 'nuHome.routing.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
+

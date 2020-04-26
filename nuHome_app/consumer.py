@@ -1,40 +1,59 @@
 import json
 from channels.generic.websocket import WebsocketConsumer
-from django.contrib.auth.models import *
+from django.contrib.auth.models import User
+from nuHome_app.models import *
 from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+from channels.auth import login, logout
+import time
 
 class ChatConsumer(WebsocketConsumer):
 
     def on_open(self, data):
+        print('on open')
         username = data['username']
         user = self.get_user(username)
         messages = Message.last_10_messages(user)
         for message in messages:
-            self.retrieve_message(message)
+            self.retrieve_history_message(message)
 
     def on_message(self, data):
+        print('on message')
         new_message = self.save_new_message(data)
-        to_user = self.get_user(data['to_user'])
-        if Connection.objects.filter(user=to_user).exists():
-            to_user_connection = Connection.objects.get(user=to_user)
-        self.send_to_channel(new_message, to_user_connection)
+        self.send_to_channel(new_message)
 
-    # unknwon connection
+    commands = {
+        'on_open': on_open,
+        'on_message': on_message
+    }
+
     def connect(self):
-        Connection.objects.create(channel_name=self.channel_name)
+        self.room_group_name = 'chat_%s' % self.scope["user"].username
+        print('connect to room group name ' + self.room_group_name)
+        # Join room group
+        async_to_sync(self.channel_layer.group_add)(
+            self.room_group_name,
+            self.channel_name
+        )
+        self.accept()
 
     def disconnect(self, close_code):
-        Connection.objects.filter(channel_name=self.channel_name).delete()
+        async_to_sync(self.channel_layer.group_discard)(
+            self.room_group_name,
+            self.channel_name
+        )
+
+    def receive(self, text_data):
+        data = json.loads(text_data)
+        command_name = data['command']
+        command = self.commands[command_name]
+        command(self, data)
+
 
     # helper functions below
-    def retrieve_message(message):
-        self.send(text_data=json.dumps({
-            'type': 'message',
-            'content': message.content,
-            'timestamp': message.date_time
-        }))
 
     def save_new_message(self, data):
+        print('save new')
         from_user = self.get_user(data['from_user'])
         to_user = self.get_user(data['to_user'])
         content = data['content']
@@ -43,19 +62,37 @@ class ChatConsumer(WebsocketConsumer):
         new_message.save()
         return new_message
 
-    def get_user(username):
-        if Refugee_Profile.objects.filter(username=username).exists():
-            return Refugee_Profile.objects.get(username=username)
+    def send_to_channel(self, message):
+        print('send to')
+        async_to_sync(self.channel_layer.group_send)(
+            self.room_group_name,
+            {
+                'type': 'retrieve_chat_message',
+                'message_str': self.get_message_str(message)
+            }
+        )
 
-        elif NGO_Profile.objects.filter(user=username).exists():
-            return NGO_Profile.objects.get(user=username)
-        return None
 
-    def send_to_channel(message, to_user_connection):
-        channel_layer = get_channel_layer()
-        yield from channel_layer.send(to_user_connection, {
-            'type': 'message',
+    # helper of helper functions
+
+    def retrieve_history_message(self, message):
+        print('retrieve_history_message')
+        self.send(text_data=self.get_message_str(message))
+
+    def retrieve_chat_message(self, event):
+        print('retrieve_chat_message')
+        self.send(text_data=event['message_str'])
+
+    def get_user(self, username):
+        return User.objects.get(username=username)
+
+    def get_message_str(self, message):
+        return json.dumps({
             'content': message.content,
-            'timestamp': message.date_time
+            'date_time': str(message.date_time),
+            'from_user': message.from_user.username,
+            'to_user': message.to_user.username,
         })
+
+
 
