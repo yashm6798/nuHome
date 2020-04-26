@@ -82,6 +82,23 @@ HTTP/1.1 200 OK
 """
 
 """
+@api {get} /user_profile/:avatar Get user avatar
+@apiName GetUserAvatar
+@apiGroup UserProfile
+
+@apiSuccess {String} status Successful Get user avatar.
+@apiSuccess {JSON} res Return contents.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok"
+    "res": {
+        "avatar": 2
+    }
+}
+"""
+
+"""
 @api {get} /user_profile/:sar Request SAR file
 @apiName GetUserSAR
 @apiGroup UserProfile

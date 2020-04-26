@@ -42,6 +42,7 @@ urlpatterns = [
     path('get_user_profile/', profile.get_profile, name='get_user_profile'),
     path('update_user_profile/', profile.update_profile, name='update_user_profile'),
     path('delete_user_profile/', profile.delete_profile, name='delete_user_profile'),
+    path('get_avatar/', profile.get_avatar, name='get_avatar'),
     path('get_sar/', sar.get_sar, name='get_sar'),
 
     path('get_messages/', new_chat.get_messages, name='get_messages'),
