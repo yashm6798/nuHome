@@ -2,5 +2,4 @@
 **/__pycache__/
 keys/*
 documents/*
-tmp/*
-nuHome_app/migrations/
+nuHome_app/migrations/*
