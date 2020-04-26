@@ -18,10 +18,11 @@ def new_message(request):
 
         # Load json from request into a dictionary
         params = json.loads(request.body)
+        # Get user object of sender
         from_user = User.objects.get(username=params['username'])
+        # Get user object of receiver
         to_user = User.objects.get(username=params['to_user'])
-        # Create a new Post object
-
+        # Create a new Message object
         new_message = Message(from_user=request.user, to_user=to_user, \
             content=params['content'], \
             date_time=int(time.time()))
@@ -37,16 +38,19 @@ def new_message(request):
 def get_messages(request):
 
     if request.method == 'GET':
+        # Load json from request into a dictionary
         params = json.loads(request.body)
+        # Get user object of requester
         user = User.objects.get(username=params['username'])
+        # Get last 10 messages of this user
         last_10_messages = Message.last_10_messages(user)
-
+        # Create a list for messages
         message_list = []
 
         for message in last_10_messages:
-
+            # Formalize the message time into 13-digit timestamp, required by frontend
             message_time = int(1000*time.mktime(message.date_time.timetuple()))
-
+            # Append each message as a json object to the list
             message_list.append({
                 'content': message.content,
                 'date_time': message_time,
@@ -57,10 +61,11 @@ def get_messages(request):
         status = 200
         # Build json response
         response = json.dumps({'status': 'ok', 'res': message_list})
-        
         return HttpResponse(response, content_type='application/json', status=status)
 
-
+'''
+This method is deprecated. Online status is not needed.
+'''
 def online_status(request):
 
     if request.method == 'GET':
