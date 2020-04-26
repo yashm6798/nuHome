@@ -18,15 +18,17 @@ def new_message(request):
 
         # Load json from request into a dictionary
         params = json.loads(request.body)
+        from_user = User.objects.get(username=params['username'])
         to_user = User.objects.get(username=params['to_user'])
         # Create a new Post object
+
         new_message = Message(from_user=request.user, to_user=to_user, \
             content=params['content'], \
             date_time=int(time.time()))
         # Save to the db
         new_message.save()
         # Build json response 
-        response = json.dumps({'status': 'ok', 'res': {'from_user': request.user.username, \
+        response = json.dumps({'status': 'ok', 'res': {'from_user': from_user.username, \
             'to_user': to_user.username}})
         status = 200
         return HttpResponse(response, content_type='application/json', status=status)
@@ -35,16 +37,19 @@ def new_message(request):
 def get_messages(request):
 
     if request.method == 'GET':
-
-        last_10_messages = Message.last_10_messages(request.user)
+        params = json.loads(request.body)
+        user = User.objects.get(username=params['username'])
+        last_10_messages = Message.last_10_messages(user)
 
         message_list = []
 
         for message in last_10_messages:
 
+            message_time = int(1000*time.mktime(message.date_time.timetuple()))
+
             message_list.append({
                 'content': message.content,
-                'date_time': str(message.date_time),
+                'date_time': message_time,
                 'from_user': message.from_user.username,
                 'to_user': message.to_user.username,
             })

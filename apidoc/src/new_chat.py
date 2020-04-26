@@ -5,6 +5,8 @@
 @apiName GetMessages
 @apiGroup Chat
 
+@apiParam {String} username Username of user to retrieve the messages.
+
 @apiSuccess {String} status Successful Select last 10 or less messages to the user or from the user.
 @apiSuccess {JSON} res Return contents.
 @apiSuccessExample {json} Success-Response:
@@ -13,22 +15,22 @@ HTTP/1.1 200 OK
     "status": "ok",
     "res": [
         {
-            "content": "hellooooo1",
-            "date_time": "2020-04-26 02:37:06.193307+00:00",
+            "content": "hellooooo",
+            "date_time": 1587868626000,
             "from_user": "testrefugee3",
             "to_user": "testngo4"
         },
         {
-            "content": "hellooooo2",
-            "date_time": "2020-04-26 02:39:39.708631+00:00",
+            "content": "hellooooo",
+            "date_time": 1587868779000,
             "from_user": "testrefugee3",
             "to_user": "testngo4"
         },
         {
             "content": "hellooooo3",
-            "date_time": "2020-04-26 02:42:36.431740+00:00",
-            "from_user": "testrefugee1",
-            "to_user": "testrefugee3"
+            "date_time": 1587868956000,
+            "from_user": "testrefugee3",
+            "to_user": "testngo4"
         }
     ]
 }
@@ -39,6 +41,7 @@ HTTP/1.1 200 OK
 @apiName PostMessage
 @apiGroup Chat
 
+@apiParam {String} username Username of user from whom the message is sent.
 @apiParam {String} to_user Username of user to whom the message is sent.
 @apiParam {String} content Message's content.
 
