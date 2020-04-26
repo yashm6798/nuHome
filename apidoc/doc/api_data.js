@@ -1,5 +1,99 @@
 define({ "api": [
   {
+    "type": "get",
+    "url": "/new_chat/:get",
+    "title": "Select last 10 messages",
+    "name": "GetMessages",
+    "group": "Chat",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Successful Select last 10 or less messages to the user or from the user.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "res",
+            "description": "<p>Return contents.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\",\n    \"res\": [\n        {\n            \"content\": \"hellooooo1\",\n            \"date_time\": \"2020-04-26 02:37:06.193307+00:00\",\n            \"from_user\": \"testrefugee3\",\n            \"to_user\": \"testngo4\"\n        },\n        {\n            \"content\": \"hellooooo2\",\n            \"date_time\": \"2020-04-26 02:39:39.708631+00:00\",\n            \"from_user\": \"testrefugee3\",\n            \"to_user\": \"testngo4\"\n        },\n        {\n            \"content\": \"hellooooo3\",\n            \"date_time\": \"2020-04-26 02:42:36.431740+00:00\",\n            \"from_user\": \"testrefugee1\",\n            \"to_user\": \"testrefugee3\"\n        }\n    ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "src/new_chat.py",
+    "groupTitle": "Chat"
+  },
+  {
+    "type": "post",
+    "url": "/new_chat/:post",
+    "title": "Create a Message",
+    "name": "PostMessage",
+    "group": "Chat",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "to_user",
+            "description": "<p>Username of user to whom the message is sent.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "content",
+            "description": "<p>Message's content.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Successful Create a Message.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "res",
+            "description": "<p>Return contents.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\"\n    \"res\": {\n        \"from_user\": \"testrefugee3\",\n        \"to_user\": \"testngo4\"\n    }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "src/new_chat.py",
+    "groupTitle": "Chat"
+  },
+  {
     "type": "delete",
     "url": "/comments/:delete",
     "title": "Delete a Comment",
