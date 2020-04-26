@@ -25,7 +25,7 @@ SECRET_KEY = 'u8-)0sv3ufw$yxmhd!9ii%#q-kz3*2!xbvdc+en18w9_2hyx(t'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["silence-rain.com", "www.silence-rain.com", "127.0.0.1"]
 
 
 # Application definition

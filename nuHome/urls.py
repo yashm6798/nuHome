@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path
-from nuHome_app import authentication, posts, comments, profile, sar, chat
+from nuHome_app import authentication, posts, comments, profile, sar
 from nuHome_app.consumer import ChatConsumer
 
 urlpatterns = [
