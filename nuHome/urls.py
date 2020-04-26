@@ -46,6 +46,8 @@ urlpatterns = [
 
     path('get_messages/', new_chat.get_messages, name='get_messages'),
     path('new_message/', new_chat.new_message, name='new_message'),
+
+    path('online_status/', new_chat.online_status, name='online_status'),
 ]
 
 websocket_urlpatterns = [

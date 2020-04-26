@@ -60,3 +60,18 @@ def get_messages(request):
         
         return HttpResponse(response, content_type='application/json', status=status)
 
+
+def online_status(request):
+
+    if request.method == 'GET':
+
+        params = json.loads(request.body)
+        user = User.objects.get(username=params['username'])
+        whether_online = user.is_authenticated
+
+        status = 200
+        # Build json response
+        response = json.dumps({'status': 'ok', 'res': {"online_status": whether_online}})
+        
+        return HttpResponse(response, content_type='application/json', status=status)
+

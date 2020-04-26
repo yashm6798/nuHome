@@ -58,3 +58,22 @@ HTTP/1.1 200 OK
 }
 """
 
+"""
+@api {get} /new_chat/:post Get user online status
+@apiName GetOnlineStatus
+@apiGroup Chat
+
+@apiParam {String} username Username of user who we need to get online status.
+
+@apiSuccess {String} status Successful Get user online status.
+@apiSuccess {JSON} res Return contents.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok"
+    "res": {
+        "online_status": false,
+    }
+}
+"""
+
