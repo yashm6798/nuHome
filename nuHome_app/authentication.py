@@ -205,7 +205,7 @@ def get_unverified_users(request):
 			unverified_refugees = []
 			# Append usernames to this list
 			for refugee in unverified_refugee_objects:
-				unverified_refugees.append({'username': refugee.user.username, 'document': refugee.verification_document})
+				unverified_refugees.append({'username': refugee.user.username, 'document': True if refugee.verification_document else False})
 			# Build json response
 			response = json.dumps({'status': 'ok', 'res': {'unverified_refugees': unverified_refugees}})
 			status = 200

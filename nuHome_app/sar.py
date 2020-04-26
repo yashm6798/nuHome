@@ -10,7 +10,7 @@ from django.core import serializers
 # STATUS CODE 200 = OKAY
 # STATUS CODE 400 = ERROR
 
-tmp_directory = "tmp/"
+tmp_directory = "downloads/sar/"
 
 def get_sar(request):
 

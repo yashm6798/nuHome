@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, re_path
 from nuHome_app import authentication, posts, comments, profile, sar, new_chat
+from nuHome_app.consumer import ChatConsumer
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -45,4 +46,8 @@ urlpatterns = [
 
     path('get_messages/', new_chat.get_messages, name='get_messages'),
     path('new_message/', new_chat.new_message, name='new_message'),
+]
+
+websocket_urlpatterns = [
+    re_path(r'ws/chat/$', ChatConsumer),
 ]

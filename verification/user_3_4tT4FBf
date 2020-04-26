@@ -1,0 +1,25 @@
+#### Payload format
+
+We will only send **strings** over WebSocket. This string will be the result of JSON.stringify() or something like that (json.dumps in Python?). The original JSON object should have the following format:
+
+```json
+{
+  "type": "message", // 2 types: "message" as simple chat messages, "info" as all other warnings/errors/confirmation
+  "content": "content of chat message",
+  "timestamp": 1500000000000
+}
+```
+
+#### Method
+
+- `send()`: use this one to send messages to clients. Details can be found in the documentation
+- `close()`: the backend use this method when the user is successfully logged out
+
+#### Event
+
+- `onopen`: triggered when the connection is established. For backend what you need to do is to send all unread messages of that user. Note that there could be a list of unread messages so please send them one by one
+- `onmessage`: triggered when you receive a message. For backend what you need to do is to extract this message, look up the user table and find the corresponding receiver, and continue according to receiver's online status
+  - If the receiver is online, send the message to him, as well as a confirmation to sender indicating that "Your message is received by backend"
+  - Otherwise, put the message in db and send a confirmation to sender indicating that "Your message is received by backend"
+- `onerror`: we can ignore this one now. 
+- `onclose`: the backend will not use this event since you will initiate the closure
