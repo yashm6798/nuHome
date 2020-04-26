@@ -105,12 +105,16 @@ def get_profile(request):
                 avatar = Refugee_Profile.objects.get(user=request.user).avatar
                 # Load verification_status from profile
                 verification_status = Refugee_Profile.objects.get(user=request.user).verification_status
+                # Load assigned ngo from profile
+                assigned_ngo = Refugee_Profile.objects.get(user=request.user).assigned_ngo.user.username
                 # Form response to send back
                 response = json.dumps({'status': 'ok', \
                     'res': {'username': username, \
                     'avatar': avatar, 'bio': bio, \
                     'region': region, \
-                    'verification_status': verification_status}})
+                    'verification_status': verification_status, \
+                    'user_type': 'refugee', \
+                    'assigned_ngo': assigned_ngo}})
 
         # Check whether user is in ngo profile
         elif NGO_Profile.objects.filter(user=request.user).exists():
@@ -121,7 +125,8 @@ def get_profile(request):
                 response = json.dumps({'status': 'ok', \
                     'res': {'username': username, \
                     'avatar': avatar, 'bio': bio, \
-                    'region': region}})
+                    'region': region, \
+                    'user_type': 'ngo_user'}})
 
         # Check whether user is in ngo admin profile
         elif NGO_Admin_Profile.objects.filter(user=request.user).exists():
@@ -129,7 +134,8 @@ def get_profile(request):
                 response = json.dumps({'status': 'ok', \
                     'res': {'username': username, \
                     'avatar': '', 'bio': '', \
-                    'region': ''}})
+                    'region': '', \
+                    'user_type': 'ngo_admin'}})
 
         else:
             # Return error
