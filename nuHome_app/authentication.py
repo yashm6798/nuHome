@@ -8,6 +8,7 @@ from django.contrib.auth.models import *
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 import os
+import random
 # Create your views here.
 
 # STATUS CODE 200 = OKAY
@@ -42,7 +43,7 @@ def registration(request):
 			assigned_ngo.no_of_refugees_assigned += 1
 			assigned_ngo.save()
 			# Create a refugee profile for the user
-			new_refugee = Refugee_Profile(user=new_user, region=params['region'], assigned_ngo=assigned_ngo)
+			new_refugee = Refugee_Profile(user=new_user, region=params['region'], assigned_ngo=assigned_ngo, avatar=random.randint(1,5))
 			# Save the refugee profile and user
 			new_user.save()
 			new_refugee.save(False)
