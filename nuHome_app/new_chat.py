@@ -46,11 +46,11 @@ def get_messages(request):
 
         for message in last_10_messages:
             # Formalize the message time into 13-digit timestamp, required by frontend
-            message_time = int(1000*time.mktime(message.date_time.timetuple()))
+            message_time = message.date_time
             # Append each message as a json object to the list
             message_list.append({
                 'content': message.content,
-                'date_time': message_time,
+                'date_time': message_time * 1000,
                 'from_user': message.from_user.username,
                 'to_user': message.to_user.username,
             })
