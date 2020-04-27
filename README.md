@@ -10,6 +10,6 @@ python3 manage.py makemigrations nuHome_app
 python3 manage.py migrate  
 python3 manage.py runserver  
 
-To get web server running:  
-python -m pip install -U channels  
-python3 -m pip install channels_redis  
+To add admin:
+- Change admin registration handler to @csrf_exempt
+- Run following cURL on AWS: `curl --header "Content-Type: application/json" --request POST --data '{"username":"admin","password":"admin","region":"China"}' http://127.0.0.1:8000/ngo_admin_registration/`
