@@ -126,7 +126,7 @@ def get_profile(request):
                     'res': {'username': username, \
                     'avatar': avatar, 'bio': bio, \
                     'region': region, \
-                    'user_type': 'ngo_user'}})
+                    'user_type': 'ngo_worker'}})
 
         # Check whether user is in ngo admin profile
         elif NGO_Admin_Profile.objects.filter(user=request.user).exists():
@@ -150,10 +150,8 @@ def get_profile(request):
 def get_avatar(request):
 
     if request.method == 'GET':
-        # Load json from request into a dictionary
-        params = json.loads(request.body)
         # Get user object from username
-        user = User.objects.get(username=params['username'])
+        user = User.objects.get(username=request.GET['username'])
         avatar = None
         status = 200
 
