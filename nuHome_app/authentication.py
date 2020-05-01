@@ -15,6 +15,36 @@ import random
 # STATUS CODE 400 = ERROR
 # STATUS CODE 401 = INCORRECT CREDENTIALS
 
+
+
+"""
+@api {post} /registration/ Register User Account
+@apiName RegisterRefugee
+@apiGroup Authentication
+
+@apiParam {String} username User's username.
+@apiParam {String} password User's password.
+@apiParam {String} region User's region.
+
+@apiSuccess {String} status Successful Registration.
+@apiSuccess {JSON} res Return contents.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok",
+    "res": {
+        "username": "testrefugee7",
+        "region": "region4",
+        "bio": "",
+        "avatar": 2,
+        "user_type": "refugee",
+        "isVerified": false,
+        "assigned_ngo": "testngo4"
+    }
+}
+
+@apiError (Error 400) {String} UsernameAlreadyTaken The <code>username</code> was already taken.
+"""
 @csrf_exempt
 def registration(request):
 	# GET request is only used to return a cookie with csrf token which needs to be returned for POST requests
@@ -58,6 +88,35 @@ def registration(request):
 		# Return an http response back to the frontend
 		return HttpResponse(response, content_type='application/json', status=status)
 
+
+
+
+"""
+@api {post} /ngo_registration/ Register NGO worker Account
+@apiName RegisterNGO
+@apiGroup Authentication
+
+@apiParam {String} username User's username.
+@apiParam {String} password User's password.
+@apiParam {String} region User's region.
+
+@apiSuccess {String} status Successful Registration.
+@apiSuccess {JSON} res Return contents.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok",
+    "res": {
+        "username": "testngo7",
+        "region": "region4",
+        "bio": "",
+        "avatar": "",
+        "user_type": "ngo_worker"
+    }
+}
+
+@apiError (Error 400) {String} UsernameAlreadyTaken The <code>username</code> was already taken.
+"""
 def ngo_registration(request):
 
 	# This methods does not require a get request to return a cookie since only a logged in ngo_admin will invoke this function
@@ -95,6 +154,33 @@ def ngo_registration(request):
 		# Return http response
 		return HttpResponse(response, content_type='application/json', status=status)
 
+
+
+
+"""
+@api {post} /ngo_admin_registration/ Register NGO worker Account
+@apiName RegisterNGOAdmin
+@apiGroup Authentication
+
+@apiParam {String} username User's username.
+@apiParam {String} password User's password.
+@apiParam {String} region User's region.
+
+@apiSuccess {String} status Successful Registration.
+@apiSuccess {JSON} res Return contents.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok",
+    "res": {
+        "username": "testadmin7",
+        "region": "region4",
+        "user_type": "ngo_admin"
+    }
+}
+
+@apiError (Error 400) {String} UsernameAlreadyTaken The <code>username</code> was already taken.
+"""
 def ngo_admin_registration(request):
 	# Return cookie to be used for POST requests
 	if request.method == 'GET':
@@ -131,6 +217,34 @@ def ngo_admin_registration(request):
 		# Return http response
 		return HttpResponse(response, content_type='application/json', status=status)
 
+
+
+
+"""
+@api {post} /login/ User Login
+@apiName LoginUser
+@apiGroup Authentication
+
+@apiParam {String} username User's username.
+@apiParam {String} password User's password.
+
+@apiSuccess {String} status Successful Login.
+@apiSuccess {JSON} res Return contents.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok",
+    "res": {
+        "username": "testngo4",
+        "region": "region4",
+        "bio": "",
+        "avatar": "",
+        "user_type": "ngo_worker"
+    }
+}
+
+@apiError (Error 401) {String} UserNotFound The <code>username</code> was not found.
+"""
 @csrf_exempt
 def login_action(request):
 	# Return cookie to be used for POST requests
@@ -185,6 +299,23 @@ def login_action(request):
 
 		return HttpResponse(response, content_type='application/json', status=status)
 
+
+
+
+"""
+@api {get} /logout/ User Logout
+@apiName LogoutUser
+@apiGroup Authentication
+
+@apiSuccess {String} status Successful Logout.
+@apiSuccess {JSON} res Return contents.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok"
+    "res": {}
+}
+"""
 def logout_action(request):
 
 	# Logout functions expires the session of the user associated with the request
@@ -194,6 +325,40 @@ def logout_action(request):
 	status = 200
 	return HttpResponse(response, content_type='application/json', status=status)
 
+
+
+
+"""
+@api {get} /get_unverified_users/ Get Unverified Users
+@apiName GetUnverifiedUsers
+@apiGroup Authentication
+
+@apiSuccess {String} status Successful Get.
+@apiSuccess {JSON} res Return contents.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok",
+    "res": {
+        "unverified_refugees": [
+            {
+                "username": "testrefugee3",
+                "document": true
+            },
+            {
+                "username": "testrefugee5",
+                "document": false
+            },
+            {
+                "username": "testrefugee7",
+                "document": false
+            }
+        ]
+    }
+}
+
+@apiError (Error 400) {String} UserAccess User is not verified as ngo.
+"""
 def get_unverified_users(request):
 
 	if request.method == 'GET':
@@ -217,6 +382,29 @@ def get_unverified_users(request):
 		
 		return HttpResponse(response, content_type='application/json', status=status)
 
+
+
+
+"""
+@api {put} /verify_user/ Verify User
+@apiName VerifyUser
+@apiGroup Authentication
+
+@apiParam {String} username User-to-verify's username.
+
+@apiSuccess {String} status Successful Verify.
+@apiSuccess {JSON} res Return contents.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok",
+    "res": {
+        "username": "testrefugee3"
+    }
+}
+
+@apiError (Error 400) {String} UserAccess User is not verified as ngo.
+"""
 def verify_user(request):
 
 	if request.method == 'PUT':
@@ -243,6 +431,26 @@ def verify_user(request):
 			return HttpResponse(response, content_type='application/json', status=status)
 
 
+
+
+"""
+@api {put} /upload_document/ Upload Document
+@apiName UploadDocument
+@apiGroup Authentication
+
+@apiParam {File} file File to Upload.
+
+@apiSuccess {String} status Successful Upload Document.
+@apiSuccess {JSON} res Return contents.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok",
+    "res": {}
+}
+
+@apiError (Error 400) {String} NoFileFound No file found.
+"""
 def file_upload(request):
 
 	if request.method == 'POST':

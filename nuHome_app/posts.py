@@ -10,6 +10,28 @@ from django.core import serializers
 # STATUS CODE 400 = ERROR
 
 
+
+
+"""
+@api {post} /new_post/ Create a Post
+@apiName PostPost
+@apiGroup Posts
+
+@apiParam {String} title Post's title.
+@apiParam {String} content Post's content.
+@apiParam {String} category Post's category.
+
+@apiSuccess {String} status Successful Create a Post.
+@apiSuccess {JSON} res Return contents.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok"
+    "res": {
+        "post_id": 8
+    }
+}
+"""
 def create_post(request):
 
 	# This function does not require a GET method
@@ -28,6 +50,27 @@ def create_post(request):
 		return HttpResponse(response, content_type='application/json', status=status)
 
 
+
+
+"""
+@api {put} /update_post_status/ Update Post Status
+@apiName PutPost
+@apiGroup Posts
+
+@apiParam {Number} post_id Post's <code>id</code>.
+@apiParam {String} status Post's status.
+
+@apiSuccess {String} status Successful Update Post Status.
+@apiSuccess {JSON} res Return contents.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok"
+    "res": {
+        "post_id": 8
+    }
+}
+"""
 def update_post_status(request):
 
 	# This function does not require a GET method
@@ -48,6 +91,28 @@ def update_post_status(request):
 		return HttpResponse(response, content_type='application/json', status=status)
 
 
+
+
+"""
+@api {delete} /delete_post/ Delete a Post
+@apiName DeletePost
+@apiGroup Posts
+
+@apiParam {Number} post_id Post's <code>id</code>.
+
+@apiSuccess {String} status Successful Delete a Post.
+@apiSuccess {JSON} res Return contents.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok"
+    "res": {
+        "post_id": 8
+    }
+}
+
+@apiError (Error 400) {String} NoPostFound No post found.
+"""
 def delete_post(request):
 
 	# This function does not require a GET method
@@ -74,6 +139,51 @@ def delete_post(request):
 		return HttpResponse(response, content_type='application/json', status=status)
 
 
+
+
+
+"""
+@api {get} /get_all_posts/ Select all Posts 
+@apiName GetPost
+@apiGroup Posts
+
+@apiSuccess {String} status Successful Select all Posts.
+@apiSuccess {JSON} res Return contents.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok"
+    "res": [
+        {
+            "username": "alpaca",
+            "post_id": 1,
+            "title": "Food Resources Nearby",
+            "content": "Free food distribution for refugees at Frobes Ave!",
+            "status": "unverified",
+            "category": "living",
+            "date_time": "2020-01-01 19:00:00 GMT+2"
+        },
+        {
+            "username": "goat",
+            "post_id": 2,
+            "title": "Job Opportunities!",
+            "content": "Come get a job as a banker.",
+            "status": "verified",
+            "category": "living",
+            "date_time": "2020-01-01 19:58:00 GMT+2"
+        },
+        {
+            "username": "bear",
+            "post_id": 3,
+            "title": "New Gathering",
+            "content": "Gathering at Murray Ave!",
+            "status": "false",
+            "category": "social",
+            "date_time": "2020-01-01 22:00:00 GMT+2"
+        }
+    ]
+}
+"""
 def get_posts(request):
 
 	if request.method == 'GET':

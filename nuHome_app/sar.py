@@ -12,6 +12,25 @@ from django.core import serializers
 
 tmp_directory = "downloads/sar/"
 
+
+
+
+"""
+@api {get} /get_sar Request SAR file
+@apiName GetUserSAR
+@apiGroup UserProfile
+
+@apiSuccess {String} status Successful Request SAR file.
+@apiSuccess {JSON} res Return contents.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok"
+    "res": {
+        "url": "/tmp/sample_file.pdf"
+    }
+}
+"""
 def get_sar(request):
 
 	if request.method == 'GET':

@@ -11,6 +11,29 @@ from django.core import serializers
 # STATUS CODE 400 = ERROR
 
 
+
+
+"""
+@api {put} /update_user_profile/ Update User Profile
+@apiName PutUserProfile
+@apiGroup UserProfile
+
+@apiParam {Number} avatar User's avatar index.
+@apiParam {String} bio User's bio.
+
+@apiSuccess {String} status Successful Update User Profile.
+@apiSuccess {JSON} res Return contents.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok"
+    "res": {
+        "username": "horse"
+    }
+}
+
+@apiError (Error 400) {String} NoProfileFound No valid user profile.
+"""
 def update_profile(request):
 
     # This function does not require a GET method
@@ -52,6 +75,26 @@ def update_profile(request):
         return HttpResponse(response, content_type='application/json', status=status)
 
 
+
+
+"""
+@api {delete} /delete_user_profile/ Delete User Profile
+@apiName DeleteUserProfile
+@apiGroup UserProfile
+
+@apiSuccess {String} status Successful Delete User Profile.
+@apiSuccess {JSON} res Return contents.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok"
+    "res": {
+        "username": "duck"
+    }
+}
+
+@apiError (Error 400) {String} NoProfileFound No valid user profile.
+"""
 def delete_profile(request):
 
     # This function does not require a GET method
@@ -87,6 +130,54 @@ def delete_profile(request):
         return HttpResponse(response, content_type='application/json', status=status)
 
 
+
+
+"""
+@api {get} /get_user_profile/ Get User Profile
+@apiName GetUserProfile
+@apiGroup UserProfile
+
+@apiSuccess {String} status Successful Get User Profile.
+@apiSuccess {JSON} res Return contents.
+@apiSuccessExample {json} Refugee-Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok"
+    "res": {
+        "username": "tiger",
+        "avatar": 10,
+        "bio": "Help me find a life here."
+        "region": "Skopje, Macedonia",
+        "verification_status": false
+    }
+}
+
+@apiSuccessExample {json} NGO-Worker-Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok"
+    "res": {
+        "username": "NGO_cat",
+        "avatar": 8,
+        "bio": "I wish for world peace."
+        "region": "Skopje, Macedonia"
+    }
+}
+
+@apiSuccessExample {json} NGO-Admin-Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok"
+    "res": {
+        "username": "NGO_elephant",
+        "avatar": 4,
+        "bio": ""
+        "region": ""
+    }
+}
+
+@apiError (Error 400) {String} NoProfileFound No valid user profile.
+"""
 def get_profile(request):
 
     if request.method == 'GET':
@@ -147,6 +238,26 @@ def get_profile(request):
         return HttpResponse(response, content_type='application/json', status=status)
 
 
+
+
+"""
+@api {get} /get_avatar/ Get User Avatar
+@apiName GetUserAvatar
+@apiGroup UserProfile
+
+@apiSuccess {String} status Successful Get user avatar.
+@apiSuccess {JSON} res Return contents.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok"
+    "res": {
+        "avatar": 2
+    }
+}
+
+@apiError (Error 400) {String} NoProfileFound No valid user profile.
+"""
 def get_avatar(request):
 
     if request.method == 'GET':
@@ -168,7 +279,7 @@ def get_avatar(request):
             # Return error
             status = 400
             # Build json response
-            response = json.dumps({'status': 'err', 'res': {'avatar': 'No valid user avatar'}})
+            response = json.dumps({'status': 'err', 'res': {'avatar': 'No valid user profile'}})
 
         if avatar is not None:
             

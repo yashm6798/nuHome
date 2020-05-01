@@ -3,7 +3,7 @@
   "version": "0.3.0",
   "description": "Documentation for the REST api access provided at NuHome",
   "title": "NuHome Api doc",
-  "url": "http://www.silence-rain.com/apidocs",
+  "url": "http://www.silence-rain.com",
   "template": {
     "withCompare": true,
     "withGenerator": true,

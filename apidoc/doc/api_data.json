@@ -1,10 +1,10 @@
 [
   {
     "type": "get",
-    "url": "/new_chat/:get",
-    "title": "Select last 10 messages",
-    "name": "GetMessages",
-    "group": "Chat",
+    "url": "/get_unverified_users/",
+    "title": "Get Unverified Users",
+    "name": "GetUnverifiedUsers",
+    "group": "Authentication",
     "success": {
       "fields": {
         "Success 200": [
@@ -13,7 +13,7 @@
             "type": "String",
             "optional": false,
             "field": "status",
-            "description": "<p>Successful Select last 10 or less messages to the user or from the user.</p>"
+            "description": "<p>Successful Get.</p>"
           },
           {
             "group": "Success 200",
@@ -27,24 +27,558 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\",\n    \"res\": [\n        {\n            \"content\": \"hellooooo1\",\n            \"date_time\": \"2020-04-26 02:37:06.193307+00:00\",\n            \"from_user\": \"testrefugee3\",\n            \"to_user\": \"testngo4\"\n        },\n        {\n            \"content\": \"hellooooo2\",\n            \"date_time\": \"2020-04-26 02:39:39.708631+00:00\",\n            \"from_user\": \"testrefugee3\",\n            \"to_user\": \"testngo4\"\n        },\n        {\n            \"content\": \"hellooooo3\",\n            \"date_time\": \"2020-04-26 02:42:36.431740+00:00\",\n            \"from_user\": \"testrefugee1\",\n            \"to_user\": \"testrefugee3\"\n        }\n    ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\",\n    \"res\": {\n        \"unverified_refugees\": [\n            {\n                \"username\": \"testrefugee3\",\n                \"document\": true\n            },\n            {\n                \"username\": \"testrefugee5\",\n                \"document\": false\n            },\n            {\n                \"username\": \"testrefugee7\",\n                \"document\": false\n            }\n        ]\n    }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 400": [
+          {
+            "group": "Error 400",
+            "type": "String",
+            "optional": false,
+            "field": "UserAccess",
+            "description": "<p>User is not verified as ngo.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "../nuHome_app/authentication.py",
+    "groupTitle": "Authentication"
+  },
+  {
+    "type": "post",
+    "url": "/login/",
+    "title": "User Login",
+    "name": "LoginUser",
+    "group": "Authentication",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "username",
+            "description": "<p>User's username.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "password",
+            "description": "<p>User's password.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Successful Login.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "res",
+            "description": "<p>Return contents.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\",\n    \"res\": {\n        \"username\": \"testngo4\",\n        \"region\": \"region4\",\n        \"bio\": \"\",\n        \"avatar\": \"\",\n        \"user_type\": \"ngo_worker\"\n    }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 401": [
+          {
+            "group": "Error 401",
+            "type": "String",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>The <code>username</code> was not found.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "../nuHome_app/authentication.py",
+    "groupTitle": "Authentication"
+  },
+  {
+    "type": "get",
+    "url": "/logout/",
+    "title": "User Logout",
+    "name": "LogoutUser",
+    "group": "Authentication",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Successful Logout.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "res",
+            "description": "<p>Return contents.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\"\n    \"res\": {}\n}",
           "type": "json"
         }
       ]
     },
     "version": "0.0.0",
-    "filename": "src/new_chat.py",
+    "filename": "../nuHome_app/authentication.py",
+    "groupTitle": "Authentication"
+  },
+  {
+    "type": "post",
+    "url": "/ngo_registration/",
+    "title": "Register NGO worker Account",
+    "name": "RegisterNGO",
+    "group": "Authentication",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "username",
+            "description": "<p>User's username.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "password",
+            "description": "<p>User's password.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "region",
+            "description": "<p>User's region.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Successful Registration.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "res",
+            "description": "<p>Return contents.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\",\n    \"res\": {\n        \"username\": \"testngo7\",\n        \"region\": \"region4\",\n        \"bio\": \"\",\n        \"avatar\": \"\",\n        \"user_type\": \"ngo_worker\"\n    }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 400": [
+          {
+            "group": "Error 400",
+            "type": "String",
+            "optional": false,
+            "field": "UsernameAlreadyTaken",
+            "description": "<p>The <code>username</code> was already taken.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "../nuHome_app/authentication.py",
+    "groupTitle": "Authentication"
+  },
+  {
+    "type": "post",
+    "url": "/ngo_admin_registration/",
+    "title": "Register NGO worker Account",
+    "name": "RegisterNGOAdmin",
+    "group": "Authentication",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "username",
+            "description": "<p>User's username.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "password",
+            "description": "<p>User's password.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "region",
+            "description": "<p>User's region.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Successful Registration.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "res",
+            "description": "<p>Return contents.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\",\n    \"res\": {\n        \"username\": \"testadmin7\",\n        \"region\": \"region4\",\n        \"user_type\": \"ngo_admin\"\n    }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 400": [
+          {
+            "group": "Error 400",
+            "type": "String",
+            "optional": false,
+            "field": "UsernameAlreadyTaken",
+            "description": "<p>The <code>username</code> was already taken.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "../nuHome_app/authentication.py",
+    "groupTitle": "Authentication"
+  },
+  {
+    "type": "post",
+    "url": "/registration/",
+    "title": "Register User Account",
+    "name": "RegisterRefugee",
+    "group": "Authentication",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "username",
+            "description": "<p>User's username.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "password",
+            "description": "<p>User's password.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "region",
+            "description": "<p>User's region.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Successful Registration.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "res",
+            "description": "<p>Return contents.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\",\n    \"res\": {\n        \"username\": \"testrefugee7\",\n        \"region\": \"region4\",\n        \"bio\": \"\",\n        \"avatar\": 2,\n        \"user_type\": \"refugee\",\n        \"isVerified\": false,\n        \"assigned_ngo\": \"testngo4\"\n    }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 400": [
+          {
+            "group": "Error 400",
+            "type": "String",
+            "optional": false,
+            "field": "UsernameAlreadyTaken",
+            "description": "<p>The <code>username</code> was already taken.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "../nuHome_app/authentication.py",
+    "groupTitle": "Authentication"
+  },
+  {
+    "type": "put",
+    "url": "/upload_document/",
+    "title": "Upload Document",
+    "name": "UploadDocument",
+    "group": "Authentication",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "File",
+            "optional": false,
+            "field": "file",
+            "description": "<p>File to Upload.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Successful Upload Document.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "res",
+            "description": "<p>Return contents.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\",\n    \"res\": {}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 400": [
+          {
+            "group": "Error 400",
+            "type": "String",
+            "optional": false,
+            "field": "NoFileFound",
+            "description": "<p>No file found.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "../nuHome_app/authentication.py",
+    "groupTitle": "Authentication"
+  },
+  {
+    "type": "put",
+    "url": "/verify_user/",
+    "title": "Verify User",
+    "name": "VerifyUser",
+    "group": "Authentication",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "username",
+            "description": "<p>User-to-verify's username.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Successful Verify.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "res",
+            "description": "<p>Return contents.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\",\n    \"res\": {\n        \"username\": \"testrefugee3\"\n    }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 400": [
+          {
+            "group": "Error 400",
+            "type": "String",
+            "optional": false,
+            "field": "UserAccess",
+            "description": "<p>User is not verified as ngo.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "../nuHome_app/authentication.py",
+    "groupTitle": "Authentication"
+  },
+  {
+    "type": "get",
+    "url": "/get_messages/",
+    "title": "Select messages",
+    "name": "GetMessages",
+    "group": "Chat",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "username",
+            "description": "<p>Username of user to retrieve the messages.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Successful Select messages to the user or from the user, ordered by time.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "res",
+            "description": "<p>Return contents.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\",\n    \"res\": [\n        {\n            \"content\": \"hellooooo\",\n            \"date_time\": 1587868626000,\n            \"from_user\": \"testrefugee3\",\n            \"to_user\": \"testngo4\"\n        },\n        {\n            \"content\": \"hellooooo\",\n            \"date_time\": 1587868779000,\n            \"from_user\": \"testrefugee3\",\n            \"to_user\": \"testngo4\"\n        },\n        {\n            \"content\": \"hellooooo3\",\n            \"date_time\": 1587868956000,\n            \"from_user\": \"testrefugee3\",\n            \"to_user\": \"testngo4\"\n        }\n    ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../nuHome_app/new_chat.py",
     "groupTitle": "Chat"
   },
   {
     "type": "post",
-    "url": "/new_chat/:post",
+    "url": "/new_message/",
     "title": "Create a Message",
     "name": "PostMessage",
     "group": "Chat",
     "parameter": {
       "fields": {
         "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "username",
+            "description": "<p>Username of user from whom the message is sent.</p>"
+          },
           {
             "group": "Parameter",
             "type": "String",
@@ -90,14 +624,14 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "src/new_chat.py",
+    "filename": "../nuHome_app/new_chat.py",
     "groupTitle": "Chat"
   },
   {
     "type": "delete",
-    "url": "/comments/:delete",
+    "url": "/delete_comment/",
     "title": "Delete a Comment",
-    "name": "DeleteComments",
+    "name": "DeleteComment",
     "group": "Comments",
     "parameter": {
       "fields": {
@@ -132,13 +666,26 @@
         }
       ]
     },
+    "error": {
+      "fields": {
+        "Error 400": [
+          {
+            "group": "Error 400",
+            "type": "String",
+            "optional": false,
+            "field": "NoCommentFound",
+            "description": "<p>No comment found.</p>"
+          }
+        ]
+      }
+    },
     "version": "0.0.0",
-    "filename": "src/comment.py",
+    "filename": "../nuHome_app/comments.py",
     "groupTitle": "Comments"
   },
   {
     "type": "get",
-    "url": "/comments/:get",
+    "url": "/get_comments/",
     "title": "Select all Comments of a Post",
     "name": "GetComments",
     "group": "Comments",
@@ -149,8 +696,8 @@
             "group": "Parameter",
             "type": "Number",
             "optional": false,
-            "field": "comment_id",
-            "description": "<p>Comment's <code>id</code>.</p>"
+            "field": "post_id",
+            "description": "<p>Post's <code>id</code>.</p>"
           }
         ]
       }
@@ -176,12 +723,12 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "src/comment.py",
+    "filename": "../nuHome_app/comments.py",
     "groupTitle": "Comments"
   },
   {
     "type": "post",
-    "url": "/comments/:post",
+    "url": "/new_comment/",
     "title": "Create a Comment",
     "name": "PostComments",
     "group": "Comments",
@@ -201,13 +748,6 @@
             "optional": false,
             "field": "content",
             "description": "<p>Comment's content.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "date_time",
-            "description": "<p>Comment's date and time.</p>"
           }
         ]
       }
@@ -227,105 +767,18 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\"\n    \"res\": {\n        \"comment_id\": 3\n    }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\"\n    \"res\": {\n        \"comment_id\": 10,\n        \"post_id\": 5\n    }\n}",
           "type": "json"
         }
       ]
     },
     "version": "0.0.0",
-    "filename": "src/comment.py",
+    "filename": "../nuHome_app/comments.py",
     "groupTitle": "Comments"
   },
   {
-    "type": "get",
-    "url": "/ngo/:verified_users",
-    "title": "Get all verified users assigned to an NGO worker",
-    "name": "GetVerifiedUsers",
-    "group": "NGO",
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "status",
-            "description": "<p>Successful getting all verified users.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "JSON",
-            "optional": false,
-            "field": "res",
-            "description": "<p>Return contents.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\"\n    \"res\": {\n        \"usernames\": [\"rabbit\", \"monkey\", \"dolphin\"]\n    }\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "src/ngo.py",
-    "groupTitle": "NGO"
-  },
-  {
-    "type": "put",
-    "url": "/ngo/:verify",
-    "title": "Verify a user",
-    "name": "VerifyUser",
-    "group": "NGO",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "username",
-            "description": "<p>User's username.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "status",
-            "description": "<p>Successful Verify a User.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "JSON",
-            "optional": false,
-            "field": "res",
-            "description": "<p>Return contents.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\"\n    \"res\": {\n        \"username\": \"snake\"\n    }\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "src/ngo.py",
-    "groupTitle": "NGO"
-  },
-  {
     "type": "delete",
-    "url": "/posts/:delete",
+    "url": "/delete_post/",
     "title": "Delete a Post",
     "name": "DeletePost",
     "group": "Posts",
@@ -369,13 +822,26 @@
         }
       ]
     },
+    "error": {
+      "fields": {
+        "Error 400": [
+          {
+            "group": "Error 400",
+            "type": "String",
+            "optional": false,
+            "field": "NoPostFound",
+            "description": "<p>No post found.</p>"
+          }
+        ]
+      }
+    },
     "version": "0.0.0",
-    "filename": "src/post.py",
+    "filename": "../nuHome_app/posts.py",
     "groupTitle": "Posts"
   },
   {
     "type": "get",
-    "url": "/posts/:get",
+    "url": "/get_all_posts/",
     "title": "Select all Posts",
     "name": "GetPost",
     "group": "Posts",
@@ -407,49 +873,12 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "src/post.py",
-    "groupTitle": "Posts"
-  },
-  {
-    "type": "get",
-    "url": "/posts/:notification_change",
-    "title": "Get notification of post change",
-    "name": "PostNotify",
-    "group": "Posts",
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "status",
-            "description": "<p>Successful Send Post change notification.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "JSON",
-            "optional": false,
-            "field": "res",
-            "description": "<p>Return contents.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\"\n    \"res\": {\n        \"post_ids\": [8, 10, 13]\n    }\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "src/post.py",
+    "filename": "../nuHome_app/posts.py",
     "groupTitle": "Posts"
   },
   {
     "type": "post",
-    "url": "/posts/:post",
+    "url": "/new_post/",
     "title": "Create a Post",
     "name": "PostPost",
     "group": "Posts",
@@ -476,13 +905,6 @@
             "optional": false,
             "field": "category",
             "description": "<p>Post's category.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Time",
-            "optional": false,
-            "field": "date_time",
-            "description": "<p>Post's date and time.</p>"
           }
         ]
       }
@@ -515,13 +937,13 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "src/post.py",
+    "filename": "../nuHome_app/posts.py",
     "groupTitle": "Posts"
   },
   {
     "type": "put",
-    "url": "/posts/:put",
-    "title": "Update a Post",
+    "url": "/update_post_status/",
+    "title": "Update Post Status",
     "name": "PutPost",
     "group": "Posts",
     "parameter": {
@@ -538,36 +960,8 @@
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "title",
-            "description": "<p>Post's title.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "content",
-            "description": "<p>Post's content.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
             "field": "status",
             "description": "<p>Post's status.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "category",
-            "description": "<p>Post's category.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "date_time",
-            "description": "<p>Post's date and time.</p>"
           }
         ]
       }
@@ -580,7 +974,7 @@
             "type": "String",
             "optional": false,
             "field": "status",
-            "description": "<p>Successful Update a Post.</p>"
+            "description": "<p>Successful Update Post Status.</p>"
           },
           {
             "group": "Success 200",
@@ -600,119 +994,12 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "src/post.py",
+    "filename": "../nuHome_app/posts.py",
     "groupTitle": "Posts"
   },
   {
-    "type": "post",
-    "url": "/user/:login",
-    "title": "User Login",
-    "name": "LoginUser",
-    "group": "User",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "username",
-            "description": "<p>User's username.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "password",
-            "description": "<p>User's password.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "status",
-            "description": "<p>Successful Login.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "JSON",
-            "optional": false,
-            "field": "res",
-            "description": "<p>Return contents.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\"\n    \"res\": {}\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 401": [
-          {
-            "group": "Error 401",
-            "type": "String",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>The <code>username</code> was not found.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/login.py",
-    "groupTitle": "User"
-  },
-  {
-    "type": "post",
-    "url": "/user/:logout",
-    "title": "User Logout",
-    "name": "LogoutUser",
-    "group": "User",
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "status",
-            "description": "<p>Successful Logout.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "JSON",
-            "optional": false,
-            "field": "res",
-            "description": "<p>Return contents.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\"\n    \"res\": {}\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "src/login.py",
-    "groupTitle": "User"
-  },
-  {
     "type": "delete",
-    "url": "/user_profile/:delete",
+    "url": "/delete_user_profile/",
     "title": "Delete User Profile",
     "name": "DeleteUserProfile",
     "group": "UserProfile",
@@ -743,13 +1030,76 @@
         }
       ]
     },
+    "error": {
+      "fields": {
+        "Error 400": [
+          {
+            "group": "Error 400",
+            "type": "String",
+            "optional": false,
+            "field": "NoProfileFound",
+            "description": "<p>No valid user profile.</p>"
+          }
+        ]
+      }
+    },
     "version": "0.0.0",
-    "filename": "src/user_profile.py",
+    "filename": "../nuHome_app/profile.py",
     "groupTitle": "UserProfile"
   },
   {
     "type": "get",
-    "url": "/user_profile/:get",
+    "url": "/get_avatar/",
+    "title": "Get User Avatar",
+    "name": "GetUserAvatar",
+    "group": "UserProfile",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>Successful Get user avatar.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "JSON",
+            "optional": false,
+            "field": "res",
+            "description": "<p>Return contents.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\"\n    \"res\": {\n        \"avatar\": 2\n    }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 400": [
+          {
+            "group": "Error 400",
+            "type": "String",
+            "optional": false,
+            "field": "NoProfileFound",
+            "description": "<p>No valid user profile.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "../nuHome_app/profile.py",
+    "groupTitle": "UserProfile"
+  },
+  {
+    "type": "get",
+    "url": "/get_user_profile/",
     "title": "Get User Profile",
     "name": "GetUserProfile",
     "group": "UserProfile",
@@ -790,13 +1140,26 @@
         }
       ]
     },
+    "error": {
+      "fields": {
+        "Error 400": [
+          {
+            "group": "Error 400",
+            "type": "String",
+            "optional": false,
+            "field": "NoProfileFound",
+            "description": "<p>No valid user profile.</p>"
+          }
+        ]
+      }
+    },
     "version": "0.0.0",
-    "filename": "src/user_profile.py",
+    "filename": "../nuHome_app/profile.py",
     "groupTitle": "UserProfile"
   },
   {
     "type": "get",
-    "url": "/user_profile/:sar",
+    "url": "/get_sar",
     "title": "Request SAR file",
     "name": "GetUserSAR",
     "group": "UserProfile",
@@ -828,12 +1191,12 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "src/user_profile.py",
+    "filename": "../nuHome_app/sar.py",
     "groupTitle": "UserProfile"
   },
   {
     "type": "put",
-    "url": "/user_profile/:put",
+    "url": "/update_user_profile/",
     "title": "Update User Profile",
     "name": "PutUserProfile",
     "group": "UserProfile",
@@ -884,92 +1247,21 @@
         }
       ]
     },
-    "version": "0.0.0",
-    "filename": "src/user_profile.py",
-    "groupTitle": "UserProfile"
-  },
-  {
-    "type": "post",
-    "url": "/user/:register",
-    "title": "Register User Account",
-    "name": "RegisterUser",
-    "group": "User",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "username",
-            "description": "<p>User's username.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "password",
-            "description": "<p>User's password.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "type",
-            "description": "<p>User's type.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "region",
-            "description": "<p>User's region.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "status",
-            "description": "<p>Successful Registration.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "JSON",
-            "optional": false,
-            "field": "res",
-            "description": "<p>Return contents.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"status\": \"ok\"\n    \"res\": {\n        \"username\": \"lion\"\n    }\n}",
-          "type": "json"
-        }
-      ]
-    },
     "error": {
       "fields": {
-        "Error 4xx": [
+        "Error 400": [
           {
-            "group": "Error 4xx",
+            "group": "Error 400",
             "type": "String",
             "optional": false,
-            "field": "UsernameAlreadyTaken",
-            "description": "<p>The <code>username</code> was already taken.</p>"
+            "field": "NoProfileFound",
+            "description": "<p>No valid user profile.</p>"
           }
         ]
       }
     },
     "version": "0.0.0",
-    "filename": "src/login.py",
-    "groupTitle": "User"
+    "filename": "../nuHome_app/profile.py",
+    "groupTitle": "UserProfile"
   }
 ]

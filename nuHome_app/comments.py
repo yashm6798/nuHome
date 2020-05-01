@@ -10,6 +10,25 @@ from django.core import serializers
 # STATUS CODE 400 = ERROR
 
 
+"""
+@api {post} /new_comment/ Create a Comment
+@apiName PostComments
+@apiGroup Comments
+
+@apiParam {Number} post_id Post's <code>id</code>.
+@apiParam {String} content Comment's content.
+
+@apiSuccess {String} status Successful Post a Comment.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok"
+    "res": {
+        "comment_id": 10,
+        "post_id": 5
+    }
+}
+"""
 def create_comment(request):
 
 	# This function does not require a GET method
@@ -28,6 +47,27 @@ def create_comment(request):
 		return HttpResponse(response, content_type='application/json', status=status)
 
 
+
+
+"""
+@api {delete} /delete_comment/ Delete a Comment
+@apiName DeleteComment
+@apiGroup Comments
+
+@apiParam {Number} comment_id Comment's <code>id</code>.
+
+@apiSuccess {String} status Successful Delete a Comment.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok"
+    "res": {
+        "comment_id": 3
+    }
+}
+
+@apiError (Error 400) {String} NoCommentFound No comment found.
+"""
 def delete_comment(request):
 
 	# This function does not require a GET method
@@ -54,6 +94,42 @@ def delete_comment(request):
 		return HttpResponse(response, content_type='application/json', status=status)
 
 
+
+
+"""
+@api {get} /get_comments/ Select all Comments of a Post
+@apiName GetComments
+@apiGroup Comments
+
+@apiParam {Number} post_id Post's <code>id</code>.
+
+@apiSuccess {String} status Successful Select Comments of a Post.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok"
+    "res": [
+        {
+            "comment_id": 1,
+            "username": "sheep",
+            "content": "Nice post!",
+            "date_time": "2020-01-01 23:50:00 GMT+2"
+        },
+        {
+            "comment_id": 2,
+            "username": "wolverine",
+            "content": "Very helpful",
+            "date_time": "2020-01-01 23:55:00 GMT+2"
+        },
+        {
+            "comment_id": 3,
+            "username": "deer",
+            "content": "Sounds good, but where should we meet?",
+            "date_time": "2020-01-02 12:50:00 GMT+2"
+        }
+    ]
+}
+"""
 def get_comments(request):
 
 	if request.method == 'GET':

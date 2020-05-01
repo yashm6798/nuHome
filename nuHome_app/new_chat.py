@@ -10,6 +10,30 @@ from django.core import serializers
 # STATUS CODE 400 = ERROR
 
 
+
+
+
+"""
+@api {post} /new_message/ Create a Message
+@apiName PostMessage
+@apiGroup Chat
+
+@apiParam {String} username Username of user from whom the message is sent.
+@apiParam {String} to_user Username of user to whom the message is sent.
+@apiParam {String} content Message's content.
+
+@apiSuccess {String} status Successful Create a Message.
+@apiSuccess {JSON} res Return contents.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok"
+    "res": {
+        "from_user": "testrefugee3",
+        "to_user": "testngo4"
+    }
+}
+"""
 def new_message(request):
 
     # This function does not require a GET method
@@ -35,6 +59,44 @@ def new_message(request):
         return HttpResponse(response, content_type='application/json', status=status)
 
 
+
+
+
+"""
+@api {get} /get_messages/ Select messages
+@apiName GetMessages
+@apiGroup Chat
+
+@apiParam {String} username Username of user to retrieve the messages.
+
+@apiSuccess {String} status Successful Select messages to the user or from the user, ordered by time.
+@apiSuccess {JSON} res Return contents.
+@apiSuccessExample {json} Success-Response:
+HTTP/1.1 200 OK
+{
+    "status": "ok",
+    "res": [
+        {
+            "content": "hellooooo",
+            "date_time": 1587868626000,
+            "from_user": "testrefugee3",
+            "to_user": "testngo4"
+        },
+        {
+            "content": "hellooooo",
+            "date_time": 1587868779000,
+            "from_user": "testrefugee3",
+            "to_user": "testngo4"
+        },
+        {
+            "content": "hellooooo3",
+            "date_time": 1587868956000,
+            "from_user": "testrefugee3",
+            "to_user": "testngo4"
+        }
+    ]
+}
+"""
 def get_messages(request):
 
     if request.method == 'GET':
@@ -61,22 +123,5 @@ def get_messages(request):
         status = 200
         # Build json response
         response = json.dumps({'status': 'ok', 'res': message_list})
-        return HttpResponse(response, content_type='application/json', status=status)
-
-'''
-This method is deprecated. Online status is not needed.
-'''
-def online_status(request):
-
-    if request.method == 'GET':
-
-        params = json.loads(request.body)
-        user = User.objects.get(username=params['username'])
-        whether_online = user.is_authenticated
-
-        status = 200
-        # Build json response
-        response = json.dumps({'status': 'ok', 'res': {"online_status": whether_online}})
-        
         return HttpResponse(response, content_type='application/json', status=status)
 
