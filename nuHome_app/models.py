@@ -68,13 +68,13 @@ class Post(models.Model):
 class Comment(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	post = models.ForeignKey(Post, on_delete = models.CASCADE)
-	date_time = models.DateTimeField(auto_now_add=True)
+	date_time = models.IntegerField()
 	content = models.TextField(blank=False)
 
 class Message(models.Model):
 	from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='message_from')
 	to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='message_to')
-	date_time = models.DateTimeField(auto_now_add=True)
+	date_time = models.IntegerField()
 	content = models.TextField(blank=False)
 
 	def last_10_messages(user):

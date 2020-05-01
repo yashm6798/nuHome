@@ -139,7 +139,7 @@ def ngo_registration(request):
 			# Save in the db
 			new_user.save()
 			# Create an ngo user profile for the user
-			new_ngo_user = NGO_Profile(user=new_user, region=params['region'], no_of_refugees_assigned=0)
+			new_ngo_user = NGO_Profile(user=new_user, region=params['region'], avatar=random.randint(1,5), no_of_refugees_assigned=0)
 			# Save the ngo user profile
 			new_ngo_user.save()
 			# Make directory where encryption key will be stored

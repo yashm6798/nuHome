@@ -34,6 +34,7 @@ HTTP/1.1 200 OK
     }
 }
 """
+@csrf_exempt
 def new_message(request):
 
     # This function does not require a GET method
@@ -43,18 +44,17 @@ def new_message(request):
         # Load json from request into a dictionary
         params = json.loads(request.body)
         # Get user object of sender
-        from_user = User.objects.get(username=params['username'])
+        from_user = User.objects.get(username=params['from_user'])
         # Get user object of receiver
         to_user = User.objects.get(username=params['to_user'])
         # Create a new Message object
-        new_message = Message(from_user=request.user, to_user=to_user, \
+        new_message = Message(from_user=from_user, to_user=to_user, \
             content=params['content'], \
             date_time=int(time.time()))
         # Save to the db
         new_message.save()
         # Build json response 
-        response = json.dumps({'status': 'ok', 'res': {'from_user': from_user.username, \
-            'to_user': to_user.username}})
+        response = json.dumps({'status': 'ok', 'res': {'from_user': from_user.username, 'to_user': to_user.username}})
         status = 200
         return HttpResponse(response, content_type='application/json', status=status)
 
@@ -97,13 +97,12 @@ HTTP/1.1 200 OK
     ]
 }
 """
+@csrf_exempt
 def get_messages(request):
 
     if request.method == 'GET':
-        # Load json from request into a dictionary
-        params = json.loads(request.body)
         # Get user object of requester
-        user = User.objects.get(username=params['username'])
+        user = User.objects.get(username=request.GET['username'])
         # Get last 10 messages of this user
         last_10_messages = Message.last_10_messages(user)
         # Create a list for messages
@@ -111,11 +110,11 @@ def get_messages(request):
 
         for message in last_10_messages:
             # Formalize the message time into 13-digit timestamp, required by frontend
-            message_time = int(1000*time.mktime(message.date_time.timetuple()))
+            message_time = message.date_time
             # Append each message as a json object to the list
             message_list.append({
                 'content': message.content,
-                'date_time': message_time,
+                'date_time': message_time * 1000,
                 'from_user': message.from_user.username,
                 'to_user': message.to_user.username,
             })

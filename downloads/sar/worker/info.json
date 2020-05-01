@@ -1,25 +1,17 @@
 {
-    "avatar": "1",
-    "bio": "hello",
-    "region": "Germany",
-    "no_of_refugees_assigned": 3,
+    "avatar": "4",
+    "bio": "I'm here to help",
+    "region": "Afghanistan",
+    "no_of_refugees_assigned": 4,
     "comments": [],
     "posts": [
         {
             "username": "worker",
-            "title": "test 2",
-            "content": "'Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa officiis est, tenetur modi illum nesciunt porro expedita in iure dolor cupiditate ab voluptatum? Laborum labore inventore exercitationem nostrum corrupti tenetur.',",
-            "status": "verified",
-            "category": "social",
-            "date_time": 1586867000000
-        },
-        {
-            "username": "worker",
-            "title": "test 55",
-            "content": "sdads",
-            "status": "false",
-            "category": "resources",
-            "date_time": 1586964563000
+            "title": "test 1",
+            "content": "hi this is NGO worker",
+            "status": "unverified",
+            "category": "important",
+            "date_time": 1587888320000
         }
     ],
     "messages": []
